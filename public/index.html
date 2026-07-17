@@ -3,19 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
     <title>My App</title>
   </head>
   <body>
+
     <!--Website Banner-->
     <div class="banner"></div>
-    <h1>MARKETPLACE!</h1>
-    <p>Welcome to the Marketplace! Explore a wide range of products and services from various sellers. Find the best deals and make your purchases with ease.</p>
-    <button id="search_button">Search</button>
-  </div>
+        <div class="banner_content">
+            <h1>MARKETPLACE!</h1>
+            <p>Welcome to the Marketplace!</p>
+            <button id="search_button">Search</button>
+        </div>
+    </div>
 
-  <!--Product Listings-->
-  <div class="product_container">
-    <h2>Featured Products</h2>
-    <div id="root"></div>
-    <script src="/bundle.js"></script>
+    <!--Product Listings-->
+    <div class="listing_container">
+        <h2>Featured Products</h2>
+        <div id="root"></div>
+        <script src="/bundle.js"></script>
   </body>
