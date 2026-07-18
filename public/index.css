@@ -1,38 +1,52 @@
 .banner{
     background: linear-gradient(90deg, #4caf50, #81c784); /* Green gradient */
     color: white;
-    text-align: center;
     padding: 100px 20px;
     position: relative;
+    text-align: left;
   }
   
-  .banner-content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  .banner h1 {
-    font-size: 3rem;
-    margin: 0;
-  }
-  
-  .banner p {
-    font-size: 1.2rem;
-    margin: 10px 0 20px;
-  }
-  
-  .banner button {
-    background-color: white;
-    color: #4caf50;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .banner button:hover {
-    background-color: #4caf50;
-    color: white;
+.banner-content {
+max-width: 600px;
+margin: 0 auto;
+}
+
+.banner h1 {
+font-size: 3rem;
+margin: 0;
+}
+
+.banner p {
+font-size: 1.2rem;
+margin: 10px 0 20px;
+}
+
+.banner button {
+background-color: white;
+color: #4caf50;
+border: none;
+padding: 10px 20px;
+font-size: 1rem;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.banner button:hover {
+background-color: #4caf50;
+color: white;
+}
+
+
+#lising_container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.listing_card{
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px
 }
