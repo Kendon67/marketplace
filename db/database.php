@@ -1,13 +1,29 @@
 <?php
 class Database{
-    private $database;
-    private $statuscode = 500;
+    private mysqli $database;
+    private static ?Database $instance = null;
 
-    public function __construct($host, $username, $password, $dbName) {
-        $this->database = new mysqli($host, $username, $password, $dbName);
+    private function __construct() {
+        $this->database = new mysqli('localhost', 
+       'cm2252_user', 
+        '.qwertyuiop', 
+        'cm2252_marketDB');
+
         if ($this->database->connect_error) {
             die("Connection failed: " . $this->database->connect_error);
         }
     }
+
+    public static function getDbInstance(): ?Database{
+        if (self::$instance === null){
+            self::$instance = new Database();
+        }
+        return self::$instance;
+    }
+
+    public function getConn(){
+        return $this->database;
+    }
 }
 ?>
+
