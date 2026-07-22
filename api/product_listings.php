@@ -34,15 +34,17 @@ class ProductListings {
     public function getListings(){
         $this->statuscode = 200;
         $sql = "SELECT id, name, description, price, category, image, dateCreated FROM product_listings";
-        $result = $this->$database->query($query);
+        $stmt = $this->prepareStmt($sql);
 
-        if ($result->num_rows > 0) {
-            while ($this->data = $result->fetch_assoc()){
-                $this->data[] = $row;
+        if ($this->executeStatement($stmt)) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()){
+                    $this->data[] = $row;
+                }
+            } else {
+                $this->statuscode = 204;
             }
-        } else {
-            $this->statuscode = 204;
-        }
     }
 
     public function getListingId(){
@@ -85,6 +87,8 @@ class ProductListings {
     }
 }
 
+$api = new ProductListings();
+$api->handle_request($_SERVER['REQUEST_METHOD']);
 /** TODO: 
  * implement prepareStmt function
  * implement executeStmt functiin 
