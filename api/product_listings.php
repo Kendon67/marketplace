@@ -24,6 +24,11 @@ class ProductListings {
             default:
                 $this->http_response_code(405);
         }
+
+        http_response_code($this->statuscode);
+        if (!empty($this->data)) {
+            echo json_encode($this->data);
+        }
     }
 
     public function getListings(){
