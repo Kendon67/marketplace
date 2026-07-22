@@ -22,7 +22,7 @@ class ProductListings {
                 $this->deleteListing();
                 break;
             default:
-                http_response_code(405);
+                $this->http_response_code(405);
         }
     }
 
@@ -59,9 +59,25 @@ class ProductListings {
 
 
 
-    public function prepareStmt($stmt){}
+    private function prepareStmt(string $sql): mysqli_stmt|false{
+        $stmt = $this->$database->prepare($sql);
+        if (!$stmt) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return $stmt;
+        
+    }
 
-    public function executeStmt($stmt){}
+
+    private function executeStatement(mysqli_stmt $stmt){
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $this->statuscode = 500;
+            return false;
+        }
+    }
 }
 
 /** TODO: 
