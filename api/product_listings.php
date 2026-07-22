@@ -45,6 +45,7 @@ class ProductListings {
             } else {
                 $this->statuscode = 204;
             }
+        }
     }
 
     public function getListingId(){
@@ -90,8 +91,6 @@ class ProductListings {
 $api = new ProductListings();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 /** TODO: 
- * implement prepareStmt function
- * implement executeStmt functiin 
  * Add error handling to database conn and queries
  * Create a way for the relevant data to be used
  *  */
