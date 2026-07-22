@@ -10,11 +10,34 @@ class ProductListings {
         $this->$database = $instnace->getConn();
     }
 
+    public function handle_request($method){
+        switch($method){
+            case 'GET':
+                $this->getListings();
+                break;
+            case 'POST':
+                $this->addListing();
+                break;
+            case 'DELETE':
+                $this->deleteListing();
+                break;
+            default:
+                http_response_code(405);
+        }
+    }
+
     public function getListings(){
-        $query = "SELECT * FROM product_listings";
+        $this->statuscode = 200;
+        $sql = "SELECT id, name, description, price, category, image, dateCreated FROM product_listings";
         $result = $this->$database->query($query);
 
-        $sql = "SELECT name,description,price,category,image,dateCreated FROM product_listings";
+        if ($result->num_rows > 0) {
+            while ($this->data = $result->fetch_assoc()){
+                $this->data[] = $row;
+            }
+        } else {
+            $this->statuscode = 204;
+        }
     }
 
     public function getListingId(){
