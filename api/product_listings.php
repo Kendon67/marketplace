@@ -10,11 +10,42 @@ class ProductListings {
         $this->$database = $instnace->getConn();
     }
 
-    public function getListings(){
-        $query = "SELECT * FROM product_listings";
-        $result = $this->$database->query($query);
+    public function handle_request($method){
+        switch($method){
+            case 'GET':
+                $this->getListings();
+                break;
+            case 'POST':
+                $this->addListing();
+                break;
+            case 'DELETE':
+                $this->deleteListing();
+                break;
+            default:
+                $this->http_response_code(405);
+        }
 
-        $sql = "SELECT name,description,price,category,image,dateCreated FROM product_listings";
+        http_response_code($this->statuscode);
+        if (!empty($this->data)) {
+            echo json_encode($this->data);
+        }
+    }
+
+    public function getListings(){
+        $this->statuscode = 200;
+        $sql = "SELECT id, name, description, price, category, image, dateCreated FROM product_listings";
+        $stmt = $this->prepareStmt($sql);
+
+        if ($this->executeStatement($stmt)) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()){
+                    $this->data[] = $row;
+                }
+            } else {
+                $this->statuscode = 204;
+            }
+        }
     }
 
     public function getListingId(){
@@ -36,14 +67,30 @@ class ProductListings {
 
 
 
-    public function prepareStmt($stmt){}
+    private function prepareStmt(string $sql): mysqli_stmt|false{
+        $stmt = $this->$database->prepare($sql);
+        if (!$stmt) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return $stmt;
+        
+    }
 
-    public function executeStmt($stmt){}
+
+    private function executeStatement(mysqli_stmt $stmt){
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            $this->statuscode = 500;
+            return false;
+        }
+    }
 }
 
+$api = new ProductListings();
+$api->handle_request($_SERVER['REQUEST_METHOD']);
 /** TODO: 
- * implement prepareStmt function
- * implement executeStmt functiin 
  * Add error handling to database conn and queries
  * Create a way for the relevant data to be used
  *  */
