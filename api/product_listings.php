@@ -76,6 +76,23 @@ class ProductListings {
         $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
         $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
 
+        $sql = "INSERT INTO `product_lisings`(name, description, price, category, image) VALUES (?,?,?,?,?);";
+        $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
+        if ($this->executeStatement($stmt)) {
+            $this->statuscode = 201;
+            $this->date = ["listingId" => $stmt->insert_id,
+                "name" => $name,
+                "description" => $description,
+                "price" => $price,
+                "category" => $category,
+                "image" => $image
+            ];
+        }
     }
 
     private function prepareStmt(string $sql): mysqli_stmt|false{
