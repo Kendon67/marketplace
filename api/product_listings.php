@@ -123,6 +123,7 @@ $api->handle_request($_SERVER['REQUEST_METHOD']);
  *  */
 
 
+
     public function deleteListing(){
         // $sql = 'DELETE FROM product_listings WHERE id = ?';
     }
