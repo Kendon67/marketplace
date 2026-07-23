@@ -1,16 +1,18 @@
 <?php
+require_once '../db/database.php';
+
 class ProductListings {
-    header('Content-Type: application/json');
-    require_once '../db/database.php';
+    private mysqli $database;
+    private int $statuscode = 500;
+    private array $data = []; 
 
-    private $database;
-
-    public function__construct(){
+    public function __construct(){
         $instance = Database::getDbInstance();
-        $this->$database = $instnace->getConn();
+        $this->database = $instance->getConn();
     }
 
     public function handle_request($method){
+        header('Content-Type: application/json');
         switch($method){
             case 'GET':
                 $this->getListings();
@@ -22,26 +24,32 @@ class ProductListings {
                 $this->deleteListing();
                 break;
             default:
-                $this->http_response_code(405);
+                $this->statuscode = 405;
         }
 
+        // encode and echo response for use in javascript
         http_response_code($this->statuscode);
         if (!empty($this->data)) {
             echo json_encode($this->data);
         }
     }
 
+    // retrieves all listings in db 
     public function getListings(){
-        $this->statuscode = 200;
-        $sql = "SELECT id, name, description, price, category, image, dateCreated FROM product_listings";
+        $this->statuscode = 400;
+
+        // create statement for db retrieval
+        $sql = "SELECT listingId, name, description, price, category, image, dateCreated FROM `product_listings`;";
         $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
 
         if ($this->executeStatement($stmt)) {
             $result = $stmt->get_result();
             if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()){
-                    $this->data[] = $row;
-                }
+                $this->statuscode = 200;
+                $this->data = ["results" => $result->fetch_all(MYSQLI_ASSOC)];
             } else {
                 $this->statuscode = 204;
             }
@@ -52,23 +60,8 @@ class ProductListings {
         $sql = "SELECT id FROM product_listings WHERE name = ?";
     }
 
-    // constructs and executes listing sql statement
-    public function addListing(){
-        $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
-        VALUES (?,?,?,?,?,?)';
-        prepareStmt($sql);
-        executeStmt($stmt){}
-    }
-
-
-    public function deleteListing(){
-        $sql = 'DELETE FROM product_listings WHERE id = ?';
-    }
-
-
-
     private function prepareStmt(string $sql): mysqli_stmt|false{
-        $stmt = $this->$database->prepare($sql);
+        $stmt = $this->database->prepare($sql);
         if (!$stmt) {
             $this->statuscode = 500;
             return false;
@@ -94,5 +87,22 @@ $api->handle_request($_SERVER['REQUEST_METHOD']);
  * Add error handling to database conn and queries
  * Create a way for the relevant data to be used
  *  */
+
+
+     // constructs and executes listing sql statement
+     public function addListing(){
+        // $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
+        // VALUES (?,?,?,?,?,?)';
+        // prepareStmt($sql);
+        // executeStmt($stmt);
+    }
+
+
+    public function deleteListing(){
+        // $sql = 'DELETE FROM product_listings WHERE id = ?';
+    }
+
 ?>
+
+
 
