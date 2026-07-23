@@ -68,10 +68,14 @@ class ProductListings {
         || !isset($_POST['category']) || !isset($_POST['image'])) {
             return;
         }
-        // $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
-        // VALUES (?,?,?,?,?,?)';
-        // prepareStmt($sql);
-        // executeStmt($stmt);
+        
+        // sql injection prevention
+        $name = htmlspecialchars(strip_tags(trim($_POST['name'])));
+        $description = htmlspecialchars(strip_tags(trim($_POST['description'])));
+        $price = htmlspecialchars(strip_tags(trim($_POST['price'])));
+        $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
+        $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
+
     }
 
     private function prepareStmt(string $sql): mysqli_stmt|false{
