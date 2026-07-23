@@ -12,6 +12,7 @@ class Database{
         if ($this->database->connect_error) {
             die("Connection failed: " . $this->database->connect_error);
         }
+        echo "Connected successfully";
     }
 
     public static function getDbInstance(): ?Database{
