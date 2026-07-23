@@ -23,8 +23,11 @@ class ProductListings {
             case 'DELETE':
                 $this->deleteListing();
                 break;
+            default:
+                $this->statuscode = 405;
         }
 
+        // encode and echo response for use in javascript
         http_response_code($this->statuscode);
         if (!empty($this->data)) {
             echo json_encode($this->data);
@@ -33,9 +36,14 @@ class ProductListings {
 
     // retrieves all listings in db 
     public function getListings(){
-        $this->statuscode = 200;
-        $sql = "SELECT listingId, name, description, price, category, image, dateCreated FROM product_listings";
+        $this->statuscode = 400;
+
+        // create statement for db retrieval
+        $sql = "SELECT listingId, name, description, price, category, image, dateCreated FROM `product_listings`;";
         $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
 
         if ($this->executeStatement($stmt)) {
             $result = $stmt->get_result();
