@@ -60,6 +60,41 @@ class ProductListings {
         $sql = "SELECT id FROM product_listings WHERE name = ?";
     }
 
+
+
+    public function addListing(){
+        $this->statuscode = 400;
+        if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
+        || !isset($_POST['category']) || !isset($_POST['image'])) {
+            return;
+        }
+        
+        // sql injection prevention
+        $name = htmlspecialchars(strip_tags(trim($_POST['name'])));
+        $description = htmlspecialchars(strip_tags(trim($_POST['description'])));
+        $price = htmlspecialchars(strip_tags(trim($_POST['price'])));
+        $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
+        $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
+
+        $sql = "INSERT INTO `product_lisings`(name, description, price, category, image) VALUES (?,?,?,?,?);";
+        $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
+        if ($this->executeStatement($stmt)) {
+            $this->statuscode = 201;
+            $this->date = ["listingId" => $stmt->insert_id,
+                "name" => $name,
+                "description" => $description,
+                "price" => $price,
+                "category" => $category,
+                "image" => $image
+            ];
+        }
+    }
+
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -69,7 +104,6 @@ class ProductListings {
         return $stmt;
         
     }
-
 
     private function executeStatement(mysqli_stmt $stmt){
         if ($stmt->execute()) {
@@ -88,14 +122,6 @@ $api->handle_request($_SERVER['REQUEST_METHOD']);
  * Create a way for the relevant data to be used
  *  */
 
-
-     // constructs and executes listing sql statement
-     public function addListing(){
-        // $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
-        // VALUES (?,?,?,?,?,?)';
-        // prepareStmt($sql);
-        // executeStmt($stmt);
-    }
 
 
     public function deleteListing(){
