@@ -1,13 +1,16 @@
 <?php
+header('Content-Type: application/json');
+require_once '../db/database.php';
+
+
 class ProductListings {
-    header('Content-Type: application/json');
-    require_once '../db/database.php';
-
     private $database;
+    $this->data = []; 
+    private int $statuscode = 500;
 
-    public function__construct(){
+    public function __construct(){
         $instance = Database::getDbInstance();
-        $this->$database = $instnace->getConn();
+        $this->database = $instance->getConn();
     }
 
     public function handle_request($method){
@@ -21,8 +24,6 @@ class ProductListings {
             case 'DELETE':
                 $this->deleteListing();
                 break;
-            default:
-                $this->http_response_code(405);
         }
 
         http_response_code($this->statuscode);
@@ -68,7 +69,7 @@ class ProductListings {
 
 
     private function prepareStmt(string $sql): mysqli_stmt|false{
-        $stmt = $this->$database->prepare($sql);
+        $stmt = $this->database->prepare($sql);
         if (!$stmt) {
             $this->statuscode = 500;
             return false;
