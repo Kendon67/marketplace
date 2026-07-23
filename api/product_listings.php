@@ -60,6 +60,20 @@ class ProductListings {
         $sql = "SELECT id FROM product_listings WHERE name = ?";
     }
 
+
+
+    public function addListing(){
+        $this->statuscode = 400;
+        if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
+        || !isset($_POST['category']) || !isset($_POST['image'])) {
+            return;
+        }
+        // $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
+        // VALUES (?,?,?,?,?,?)';
+        // prepareStmt($sql);
+        // executeStmt($stmt);
+    }
+
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -69,7 +83,6 @@ class ProductListings {
         return $stmt;
         
     }
-
 
     private function executeStatement(mysqli_stmt $stmt){
         if ($stmt->execute()) {
@@ -87,15 +100,6 @@ $api->handle_request($_SERVER['REQUEST_METHOD']);
  * Add error handling to database conn and queries
  * Create a way for the relevant data to be used
  *  */
-
-
-     // constructs and executes listing sql statement
-     public function addListing(){
-        // $sql = 'INSERT INTO product_listings (name, description, price, category, image, dateCreated) 
-        // VALUES (?,?,?,?,?,?)';
-        // prepareStmt($sql);
-        // executeStmt($stmt);
-    }
 
 
     public function deleteListing(){
