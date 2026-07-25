@@ -3,6 +3,7 @@ const listingContainer = document.getElementById("listing_container");
 document.addEventListener("DOMContentLoaded", () => {
     const loginScreen = document.getElementById("login_screen");
     const loginButton = document.getElementById("login_button");
+    const loginScreenButton = document.getElementById("loginScreen_button");
 
     const signupScreen = document.getElementById("signup_screen");
     const signupScreenButton = document.getElementById("signupScreen_button");
@@ -13,6 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
+        loginScreen.style.display = "block";
+    });
+
+    loginScreenButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        signupScreen.style.display = "none";
         loginScreen.style.display = "block";
     });
 
