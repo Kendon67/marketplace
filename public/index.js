@@ -52,5 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Fetch error:");
         }
+        alert("Account Successfully Created!");
     });
 });
