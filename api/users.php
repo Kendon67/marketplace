@@ -50,6 +50,24 @@ class users{
 
         $stmt->bind_param("sss", $username, $email, $password);
 
+    }
 
+
+    private function prepareStmt(string $sql): mysqli_stmt|false{
+        $stmt = $this->database->prepare($sql);
+        if (!$stmt) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return $stmt;
+        
+    }
+
+    private function executeStmt(mysqli_stmt $stmt): bool{
+        if (!$stmt->execute()) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return true;
     }
 }
