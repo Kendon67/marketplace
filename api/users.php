@@ -1,4 +1,4 @@
-<?php>
+<?php
 
 class users{
     private mysqli $database;
@@ -22,13 +22,18 @@ class users{
                 $this->getListings();
                 break;
             case 'POST':
-                $this->addListing();
+                $this->addUser();
                 break;
             case 'DELETE':
                 $this->deleteListing();
                 break;
             default:
                 $this->statuscode = 405;
+        }
+        http_response_code($this->statuscode);
+
+        if (!empty($this->data)) {
+            echo json_encode($this->data);
         }
     }
 
@@ -38,7 +43,7 @@ class users{
             return;
         }
 
-        $username = htmlspecialchars(strip_tags(trim($_POST['username'];)))
+        $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
         $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
@@ -49,7 +54,9 @@ class users{
         }
 
         $stmt->bind_param("sss", $username, $email, $password);
-
+        if ($this->executeStmt($stmt)) {
+            $this->statuscode = 201;
+        }
     }
 
 
@@ -71,3 +78,7 @@ class users{
         return true;
     }
 }
+$api = new Users();
+$api->handle_request($_SERVER['REQUEST_METHOD']);
+
+?>

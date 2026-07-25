@@ -123,7 +123,6 @@ $api = new ProductListings();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 /** TODO: 
  * Add error handling to database conn and queries
- * Create a way for the relevant data to be used
  *  */
 
 ?>
