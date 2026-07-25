@@ -5,14 +5,13 @@ async function loadListings() {
         const response = await fetch("/api/product_listings.php");
         const data = await response.json();
 
-        listingContainer.innerHTML = "";
-
         data.results.forEach(listing => {
-            const listingElement = document.createElement("div");
 
-            listingElement.className = "listing_card";
+            // creates listing card and places inside of container
+            const card = document.createElement("div");
+            card.className = "listing_card";
 
-            listingElement.innerHTML = `
+            card.innerHTML = `
                 <img src="${listing.image}" alt="${listing.name}">
                 <h2>${listing.name}</h2>
                 <p>${listing.description}</p>
@@ -20,11 +19,11 @@ async function loadListings() {
                 <p>Price: £${listing.price}</p>
             `;
 
-            listingContainer.appendChild(listingElement);
+            listingContainer.appendChild(card);
         });
 
     } catch (error) {
-        console.error("Fetch error:", error);
+        console.error(error);
         listingContainer.innerHTML = "Unable to load listings";
     }
 }
