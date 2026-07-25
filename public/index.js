@@ -3,11 +3,12 @@ const listingContainer = document.getElementById("listing_container");
 document.addEventListener("DOMContentLoaded", () => {
     const loginScreen = document.getElementById("login_screen");
     const loginButton = document.getElementById("login_button");
+
     const signupScreen = document.getElementById("signup_screen");
+    const signupScreenButton = document.getElementById("signupScreen_button");
 
     const mainPage = document.getElementById("main_page");
     const homeButton = document.getElementById("home_button");
-    const signupScreenButton = document.getElementById("signupScreen_button");
 
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();

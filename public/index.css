@@ -10,8 +10,8 @@ html, body{
   min-height: 100vh;
 }
 
-/* login screen styling */
-#login_screen {
+/* login/signup screen styling */
+.screen {
   position: fixed;
   top: 0;
   left: 0;
@@ -21,20 +21,20 @@ html, body{
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 1000; 
 }
 
-.login_container {
+.login_container, .signup_container {
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 400px; 
   text-align: center;
-  align-items: center;
 }
 
-#login_form input {
+#login_form input, #signup_form input {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
@@ -43,7 +43,7 @@ html, body{
   box-sizing: border-box;
 }
 
-/* Banner Styles */
+/* Banner Styling */
 .banner {
   display: flex;
   justify-content: space-between;
