@@ -22,10 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
         signupScreen.style.display = "block";
     })
 
-    homeButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        loginScreen.style.display = "none";
-        mainPage.style.display = "block";
+    document.querySelectorAll(".home_button").forEach(button => {
+        button.addEventListener("click", () => {
+            loginScreen.style.display = "none";
+            signupScreen.style.display = "none";
+            mainPage.style.display = "block";
+        });
     });
 
 });
