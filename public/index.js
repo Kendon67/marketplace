@@ -42,12 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const formData = new FormData(signupForm);
+        const singupData = new FormData(signupForm);
 
         try {
             const response = await fetch("/api/users.php", {
                 method: "POST",
-                body: formData
+                body: signupData
             });
     
             if (response.status === 201) {
