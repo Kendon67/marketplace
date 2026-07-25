@@ -1,4 +1,5 @@
 <?php
+require_once '../db/database.php';
 
 class users{
     private mysqli $database;
