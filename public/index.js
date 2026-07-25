@@ -3,6 +3,7 @@ const listingContainer = document.getElementById("listing_container");
 document.addEventListener("DOMContentLoaded", () => {
     const loginScreen = document.getElementById("login_screen");
     const loginButton = document.getElementById("login_button");
+    const show_signup = document.getElementById("show_signup");
     const mainPage = document.getElementById("main_page");
     const homeButton = document.getElementById("home_button");
 
@@ -16,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         loginScreen.style.display = "none";
         mainPage.style.display = "block";
+    });
+
+    show_signup.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/signup.html";
     });
 });
 
