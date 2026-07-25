@@ -1,5 +1,17 @@
 const listingContainer = document.getElementById("listing_container");
 
+document.addEventListener("DOMContentLoaded", () => {
+    const loginScreen = document.getElementById("login_screen");
+    const loginButton = document.getElementById("login_button");
+    const mainPage = document.getElementById("main_page");
+
+    loginButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        mainPage.style.display = "none";
+        loginScreen.style.display = "block";
+    });
+});
+
 async function loadListings() {
     try {
         const response = await fetch("/api/product_listings.php");
