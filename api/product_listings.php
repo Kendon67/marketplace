@@ -11,6 +11,10 @@ class ProductListings {
         $this->database = $instance->getConn();
     }
 
+    public function __destruct(){
+        $this->database->close();
+    }
+
     public function handle_request($method){
         header('Content-Type: application/json');
         switch($method){
@@ -72,11 +76,11 @@ class ProductListings {
         // sql injection prevention
         $name = htmlspecialchars(strip_tags(trim($_POST['name'])));
         $description = htmlspecialchars(strip_tags(trim($_POST['description'])));
-        $price = htmlspecialchars(strip_tags(trim($_POST['price'])));
+        $price = (float)$_POST['price'];
         $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
         $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
 
-        $sql = "INSERT INTO `product_lisings`(name, description, price, category, image) VALUES (?,?,?,?,?);";
+        $sql = "INSERT INTO `product_listings`(name, description, price, category, image) VALUES (?,?,?,?,?);";
         $stmt = $this->prepareStmt($sql);
         if (!$stmt) {
             return;
@@ -85,7 +89,7 @@ class ProductListings {
         $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
         if ($this->executeStatement($stmt)) {
             $this->statuscode = 201;
-            $this->date = ["listingId" => $stmt->insert_id,
+            $this->data = ["listingId" => $stmt->insert_id,
                 "name" => $name,
                 "description" => $description,
                 "price" => $price,
@@ -121,12 +125,6 @@ $api->handle_request($_SERVER['REQUEST_METHOD']);
  * Add error handling to database conn and queries
  * Create a way for the relevant data to be used
  *  */
-
-
-
-    public function deleteListing(){
-        // $sql = 'DELETE FROM product_listings WHERE id = ?';
-    }
 
 ?>
 

@@ -4,7 +4,7 @@ class Database{
     private static ?Database $instance = null;
 
     private function __construct(){
-        $this->database = new mysqli("localhost", "cm2252_user", ".qwertyuio", "cm2252_marketDB");
+        $this->database = new mysqli("localhost", "cm2252_user", ".qwertyuio", "cm2252_marketDb");
         if ($this->database->connect_errno > 0) {
             http_response_code(500);
             exit();
@@ -18,7 +18,7 @@ class Database{
         return self::$instance;
     }
 
-    public function getConn(){
+    public function getConn(): mysqli{
         return $this->database;
     }
 }
