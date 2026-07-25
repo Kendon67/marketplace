@@ -39,7 +39,7 @@
       <div class="login_container">
         <h2>Login</h2>
         <form id="login_form">
-          <label for="username">Email</label>
+          <label for="email">Email</label>
           <input type="email" id="login_email" placeholder="Email..." required />
           
           <label for="password">Password</label>
@@ -49,20 +49,22 @@
         <button id="home_button">Back</button>
       </div>
 
-      <div id="signup_screen" class="login_screen" style="display: none;">
-        <div class="login_container">
-          <h2>Sign Up</h2>
-          <form id="login_form">
-            <label for="username">Email</label>
-            <input type="email" id="signup_email" placeholder="Email..." required />
-            <label for="username">Username</label>
-            <input type="text" id="signup_username" placeholder="Username..." required />
-            <label for="password">Password</label>
-            <input type="password" id="signup_password" placeholder="Password..." required />
-            <button type="submit">Login</button>
-          </form>
-          <button id="home_button">Back</button>
-        </div>
+    <div id="signup_screen" class="login_screen" style="display: none;">
+      <div class="signup_container">
+        <h2>Sign Up</h2>
+        <form id="signup_form">
+          <label for="email">Email</label>
+          <input type="email" id="signup_email" placeholder="Email..." required />
+
+          <label for ="username">Username</label>
+          <input type="text" id="signup_username" placeholder="Username..." required />
+
+          <label for="password">Password</label>
+          <input type="password" id="signup_password" placeholder="Password..." required />
+          <button type="submit">Sign Up</button>
+        </form>
+        <button id="home_button_signup">Back</button>
+      </div>
 
 
     
