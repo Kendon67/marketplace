@@ -4,11 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginScreen = document.getElementById("login_screen");
     const loginButton = document.getElementById("login_button");
     const mainPage = document.getElementById("main_page");
+    const homeButton = document.getElementById("home_button");
 
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
         loginScreen.style.display = "block";
+    });
+
+    homeButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        loginScreen.style.display = "none";
+        mainPage.style.display = "block";
     });
 });
 
