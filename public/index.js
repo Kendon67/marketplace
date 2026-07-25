@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
-        loginScreen.style.display = "block";
+        loginScreen.style.display = "flex";
     });
 
 
@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
         loginScreen.style.display = "none";
-        signupScreen.style.display = "block";
+        signupScreen.style.display = "flex";
     });
 
     loginScreenButton.addEventListener("click", (e) => {
         e.preventDefault();
         signupScreen.style.display = "none";
-        loginScreen.style.display = "block";
+        loginScreen.style.display = "flex";
     });
 
     // Back home buttons
