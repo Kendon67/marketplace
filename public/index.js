@@ -45,13 +45,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData(signupForm);
 
         try {
-            await fetch("/api/users.php", {
+            const response = await fetch("/api/users.php", {
                 method: "POST",
                 body: formData
             });
+    
+            if (response.status === 201) {
+                const confirmed = confirm("Account successfully created!");
+    
+                if (confirmed) {
+                    signupScreen.style.display = "none";
+                    mainPage.style.display = "block";
+                    signupForm.reset();
+                }
+            } else {
+                alert("Account creation failed.");
+            }
         } catch (error) {
-            console.error("Fetch error:");
+            console.error("Fetch error:", error);
+            alert("Something went wrong.");
         }
-        alert("Account Successfully Created!");
     });
 });
