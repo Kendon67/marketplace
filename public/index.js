@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const listingContainer = document.getElementById("listing_container");
 
     const loginButton = document.getElementById("login_button");
     const loginScreen = document.getElementById("login_screen");
@@ -70,13 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     async function loadListings() {
+        console.log("Loading listings...");
+    
         try {
             const response = await fetch("/api/product_listings.php");
+    
+            console.log("Status:", response.status);
+    
             const data = await response.json();
     
-            data.results.forEach(listing => {
+            console.log("Data:", data);
     
-                // creates listing card and places inside of container
+            data.results.forEach(listing => {
                 const card = document.createElement("div");
                 card.className = "listing_card";
     
@@ -92,9 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     
         } catch (error) {
-            console.error(error);
-            listingContainer.innerHTML = "Unable to load listings";
+            console.error("Listing error:", error);
         }
     }
+    
     
 });
