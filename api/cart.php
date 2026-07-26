@@ -16,29 +16,66 @@ class cart{
         $this->database->close();
     }
 
+    // add selected product to cart
     public function addToCart(){
 
         $userId = $_SESSION['logged_in']['id'];
         $data = json_decode(file_get_contents("php://input"), true);
-        $productId = $data['product_id'];
-
-        $sql = "INSERT INTO cart (user_id, product_id)
+        $listingId = $data['listing_id'];
+    
+        $sql = "INSERT INTO cart (userId, listingId)
                 VALUES (?, ?)";
-    
+
         $stmt = $this->prepareStmt($sql);
-    
         $stmt->bind_param(
             "ii",
             $userId,
-            $productId
+            $listingId
         );
     
         if($stmt->execute()){
             $this->statuscode = 201;
+            $this->data = [
+                "message" => "Item added to cart"
+            ];
+        }
+    }
+
+   public function getCart(){
+
+    $userId = $_SESSION['logged_in']['id'];
+
+    $sql = "SELECT p.name, p.price, c.quantity
+            FROM cart c
+            JOIN listings p ON c.listingId = p.id
+            WHERE c.userId = ?";
+
+    $stmt = $this->prepareStmt($sql);
+    $stmt->bind_param("i", $userId);
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            $this->data = $result->fetch_all(MYSQLI_ASSOC);
+            $this->statuscode = 200;
         }
     }
     
+    private function prepareStmt(string $sql): mysqli_stmt|false{
+        $stmt = $this->database->prepare($sql);
+        if (!$stmt) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return $stmt;
+    }
 
+    private function executeStmt(mysqli_stmt $stmt): bool{
+        if (!$stmt->execute()) {
+            $this->statuscode = 500;
+            return false;
+        }
+        return true;
+    }
 }
 
 
