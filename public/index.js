@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const listingContainer = document.getElementById("listing_container");
 
     const loginButton = document.getElementById("login_button");
     const loginScreen = document.getElementById("login_screen");
     const loginScreenButton = document.getElementById("loginScreen_button");
+    const loginForm = document.getElementById("login_form")
 
     const signupScreen = document.getElementById("signup_screen");
     const signupButton = document.getElementById("signupScreen_button");
@@ -11,10 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainPage = document.getElementById("main_page");
     const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
 
+    loadListings();
+
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
-        loginScreen.style.display = "block";
+        loginScreen.style.display = "flex";
     });
 
 
@@ -22,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
         loginScreen.style.display = "none";
-        signupScreen.style.display = "block";
+        signupScreen.style.display = "flex";
     });
 
     loginScreenButton.addEventListener("click", (e) => {
         e.preventDefault();
         signupScreen.style.display = "none";
-        loginScreen.style.display = "block";
+        loginScreen.style.display = "flex";
     });
 
     // Back home buttons
@@ -42,12 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const formData = new FormData(signupForm);
+        const signupData = new FormData(signupForm);
 
         try {
-            const response = await fetch("/api/users.php", {
+            const response = await fetch("/api/users.php?action=addUser", {
                 method: "POST",
-                body: formData
+                body: signupData
             });
     
             if (response.status === 201) {
@@ -66,4 +70,64 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Something went wrong.");
         }
     });
+
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const loginData = new FormData(loginForm);
+
+        try {
+            const response = await fetch("/api/users.php?action=checkUser", {
+                method: "POST",
+                body: loginData
+            });
+    
+            if (response.ok) {
+                const confirmed = confirm("Login Succssesful!");
+    
+                if (confirmed) {
+                    loginScreen.style.display = "none";
+                    mainPage.style.display = "block";
+                    loginForm.reset();
+                }
+            } else {
+                alert("Invalid Username or Password");
+            }
+        } catch (error) {
+            console.error("Fetch error");
+        }
+    });
+
+    async function loadListings() {
+        console.log("Loading listings...");
+    
+        try {
+            const response = await fetch("/api/product_listings.php");
+    
+            console.log("Status:", response.status);
+    
+            const data = await response.json();
+    
+            console.log("Data:", data);
+    
+            data.results.forEach(listing => {
+                const card = document.createElement("div");
+                card.className = "listing_card";
+    
+                card.innerHTML = `
+                    <img src="${listing.image}" alt="${listing.name}">
+                    <h2>${listing.name}</h2>
+                    <p>${listing.description}</p>
+                    <p>Category: ${listing.category}</p>
+                    <p>Price: £${listing.price}</p>
+                `;
+    
+                listingContainer.appendChild(card);
+            });
+    
+        } catch (error) {
+            console.error("Listing error:", error);
+        }
+    }
+    
+    
 });

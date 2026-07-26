@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../db/database.php';
 
 class users{
@@ -22,9 +23,17 @@ class users{
             case 'GET':
                 $this->getListings();
                 break;
+                
             case 'POST':
-                $this->addUser();
+                if ($_GET['action'] === 'addUser') {
+                    $this->addUser();
+                } elseif ($_GET['action'] === 'checkUser') {
+                    $this->checkUser();
+                }else {
+                    $this->statuscode = 400;
+                }
                 break;
+
             case 'DELETE':
                 $this->deleteListing();
                 break;
@@ -61,34 +70,44 @@ class users{
     }
 
     public function checkUser(){
+        if (!isset($_POST['email']) || !isset($_POST['password'])) {
+            $this->statuscode = 400;
+            return;
+        }
+    
         $email = $_POST['email'];
         $password = $_POST['password'];
-
-        $sql = "SELECT password FROM `users` WHERE email = ?;";
+    
+        $sql = "SELECT userId, password FROM `users` WHERE email = ?;";
         $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+    
         $stmt->bind_param("s", $email);
-        $stmt->execute();
-
+        if (!$stmt->execute()) {
+            $this->statuscode = 500;
+            return;
+        }
+    
         $result = $stmt->get_result();
-
+    
         if ($result->num_rows === 0) {
             $this->statuscode = 404;
-            return false;
+            return;
         }
-
+    
         $row = $result->fetch_assoc();
         $hashedPassword = $row['password'];
-
+    
         if (password_verify($password, $hashedPassword)) {
             $this->statuscode = 200;
-            return true;
+            $this->saveLogin($row['userId']);
         } else {
             $this->statuscode = 401;
-            return false;
         }
     }
-
-
+    
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -106,8 +125,31 @@ class users{
         }
         return true;
     }
+
+    public function saveLogin(int $user_id){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['logged_in'] = ["id" => $user_id,
+        "username" => $_POST['username']];
+    }
+
+    public function logged_in(): int|false {
+
+        if (!isset ($_SESSION['logged_in'])) {
+            return false;
+        }
+
+        return int ($_SESSION['logged_in']);
+    }
+
+    public function logout(){
+        $_SESSION['logged_in'] = null;
+    }
 }
-$api = new Users();
+
+$api = new users();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 
 ?>
