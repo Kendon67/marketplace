@@ -22,9 +22,17 @@ class users{
             case 'GET':
                 $this->getListings();
                 break;
+                
             case 'POST':
-                $this->addUser();
+                if ($_GET['action'] === 'addUser') {
+                    $this->addUser();
+                } elseif ($_GET['action'] === 'checkUser') {
+                    $this->checkUser();
+                }else {
+                    $this->statuscode = 400;
+                }
                 break;
+
             case 'DELETE':
                 $this->deleteListing();
                 break;

@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const singupData = new FormData(signupForm);
 
         try {
-            const response = await fetch("/api/users.php", {
+            const response = await fetch("/api/users.php?action=addUser", {
                 method: "POST",
                 body: signupData
             });
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const loginPassword = document.getElementById("login_password").value;
 
         try {
-            const repsonse = await fetch("/api/users.phpaction=checkUser", {
+            const repsonse = await fetch("/api/users.php?action=checkUser", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
