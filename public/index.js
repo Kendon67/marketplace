@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginButton = document.getElementById("login_button");
     const loginScreen = document.getElementById("login_screen");
     const loginScreenButton = document.getElementById("loginScreen_button");
+    const loginForm = document.getElementById("login_form")
 
     const signupScreen = document.getElementById("signup_screen");
     const signupButton = document.getElementById("signupScreen_button");
@@ -68,6 +69,35 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Fetch error:", error);
             alert("Something went wrong.");
         }
+    });
+
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const loginEmail = document.getElementById("login_email").value;
+        const loginPassword = document.getElementById("login_password").value;
+
+        try {
+            const repsonse = await fetch("/api/users.phpaction=checkUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: loginEmail, password: loginPassword })
+            });
+
+            const loginData = await repsonse.json();
+
+            if (response.ok){
+                alert("Login Successful!");
+                loginScreen.style.display = "none";
+                mainPage.style.display = "block";
+                loginForm.reset();
+            } else{
+                alert("Login Failed: Invalid email or password." );
+            }
+        } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Something went wrong.");}
     });
 
     async function loadListings() {
