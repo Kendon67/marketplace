@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const singupData = new FormData(signupForm);
+        const signupData = new FormData(signupForm);
 
         try {
             const response = await fetch("/api/users.php?action=addUser", {
@@ -73,31 +73,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const loginEmail = document.getElementById("login_email").value;
-        const loginPassword = document.getElementById("login_password").value;
+        const loginData = new FormData(loginForm);
 
         try {
-            const repsonse = await fetch("/api/users.php?action=checkUser", {
+            const response = await fetch("/api/users.php?action=checkUser", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email: loginEmail, password: loginPassword })
+                body: loginData
             });
-
-            const loginData = await repsonse.json();
-
-            if (response.ok){
-                alert("Login Successful!");
-                loginScreen.style.display = "none";
-                mainPage.style.display = "block";
-                loginForm.reset();
-            } else{
-                alert("Login Failed: Invalid email or password." );
+    
+            if (response.ok) {
+                const confirmed = confirm("Login Succssesful!");
+    
+                if (confirmed) {
+                    loginScreen.style.display = "none";
+                    mainPage.style.display = "block";
+                    loginForm.reset();
+                }
+            } else {
+                alert("Invalid Username or Password");
             }
         } catch (error) {
-                console.error("Fetch error:", error);
-                alert("Something went wrong.");}
+            console.error("Fetch error");
+        }
     });
 
     async function loadListings() {

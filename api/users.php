@@ -69,32 +69,43 @@ class users{
     }
 
     public function checkUser(){
+        if (!isset($_POST['email']) || !isset($_POST['password'])) {
+            $this->statuscode = 400;
+            return;
+        }
+    
         $email = $_POST['email'];
         $password = $_POST['password'];
-
+    
         $sql = "SELECT password FROM `users` WHERE email = ?;";
         $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+    
         $stmt->bind_param("s", $email);
-        $stmt->execute();
-
+        if (!$stmt->execute()) {
+            $this->statuscode = 500;
+            return;
+        }
+    
         $result = $stmt->get_result();
-
+    
         if ($result->num_rows === 0) {
             $this->statuscode = 404;
-            return false;
+            return;
         }
-
+    
         $row = $result->fetch_assoc();
         $hashedPassword = $row['password'];
-
+    
         if (password_verify($password, $hashedPassword)) {
             $this->statuscode = 200;
-            return true;
         } else {
             $this->statuscode = 401;
-            return false;
         }
     }
+    
 
 
     private function prepareStmt(string $sql): mysqli_stmt|false{
