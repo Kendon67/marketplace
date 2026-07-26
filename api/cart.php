@@ -16,6 +16,24 @@ class cart{
         $this->database->close();
     }
 
+    public function handle_request($method){
+        header('Content-Type: application/json');
+        switch($method){
+            case 'GET':
+                $this->getCart();
+                break;
+                
+            case 'POST':
+                $this->addToCart();
+                break;
+        }
+        http_response_code($this->statuscode);
+
+        if (!empty($this->data)) {
+            echo json_encode($this->data);
+        }
+    }
+
     // add selected product to cart
     public function addToCart(){
 
@@ -78,5 +96,6 @@ class cart{
     }
 }
 
-
+$api = new cart();
+$api->handle_request($_SERVER['REQUEST_METHOD']);
 ?>
