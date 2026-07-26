@@ -65,7 +65,6 @@ class ProductListings {
     }
 
 
-
     public function addListing(){
         $this->statuscode = 400;
         if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
