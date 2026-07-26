@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../db/database.php';
 
 class users{
@@ -77,7 +78,7 @@ class users{
         $email = $_POST['email'];
         $password = $_POST['password'];
     
-        $sql = "SELECT password FROM `users` WHERE email = ?;";
+        $sql = "SELECT userId, password FROM `users` WHERE email = ?;";
         $stmt = $this->prepareStmt($sql);
         if (!$stmt) {
             return;
@@ -101,13 +102,12 @@ class users{
     
         if (password_verify($password, $hashedPassword)) {
             $this->statuscode = 200;
+            $this->saveLogin($row['userId']);
         } else {
             $this->statuscode = 401;
         }
     }
     
-
-
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -125,8 +125,31 @@ class users{
         }
         return true;
     }
+
+    public function saveLogin(int $user_id){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['logged_in'] = ["id" => $user_id,
+        "username" => $_POST['username']];
+    }
+
+    public function logged_in(): int|false {
+
+        if (!isset ($_SESSION['logged_in'])) {
+            return false;
+        }
+
+        return int ($_SESSION['logged_in']);
+    }
+
+    public function logout(){
+        $_SESSION['logged_in'] = null;
+    }
 }
-$api = new Users();
+
+$api = new users();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 
 ?>
