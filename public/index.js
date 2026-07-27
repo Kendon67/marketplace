@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
     const listingContainer = document.getElementById("listing_container");
 
     const loginButton = document.getElementById("login_button");
@@ -12,15 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mainPage = document.getElementById("main_page");
     const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
+    
+    await loadListings();
 
-    const addToCartButton = document.querySelector(".add_to_cart_btn");
-
-    loadListings();
-
-    // adds item to cart when button is clicked
-    addToCartButton.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const product = addToCartButton.getAttribute("data-id"); // Get product ID from the button
+    // add to cart button - event listener due to dynamically updating listing container
+    listingContainer.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("add_to_cart_btn")) {
+            return;
+        }
+        const listingId = e.target.dataset.id;
     
         try {
             const response = await fetch("/api/cart.php?action=addToCart", {
@@ -29,10 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    listing_id: product // Send product ID in the request body
+                    listing_id: listingId
                 })
             });
-    
             if (response.ok) {
                 alert("Product added to cart!");
             } else {
@@ -42,6 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Something went wrong.");
         }
     });
+    // TODO: add check for user login status before allowing add to cart functionality
+
     
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
@@ -132,12 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         try {
             const response = await fetch("/api/product_listings.php");
-    
-            console.log("Status:", response.status);
-    
             const data = await response.json();
-    
-            console.log("Data:", data);
     
             data.results.forEach(listing => {
                 const card = document.createElement("div");
@@ -149,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>${listing.description}</p>
                     <p>Category: ${listing.category}</p>
                     <p>Price: £${listing.price}</p>
-                    <button class="add_to_cart_btn" data-id="${listing.id}">Add to Cart</button>
+                    <button class="add_to_cart_btn" data-id="${listing.listingId}">Add to Cart</button>
                 `;
     
                 listingContainer.appendChild(card);

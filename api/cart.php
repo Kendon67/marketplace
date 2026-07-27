@@ -1,5 +1,6 @@
 <?php 
 require_once '../db/database.php';
+session_start();
 
 class cart{
     private mysqli $database;
@@ -35,27 +36,42 @@ class cart{
     }
 
     // add selected product to cart
-    public function addToCart(){
-
+    public function addToCart() {
+        if (!isset($_SESSION['logged_in']['id'])) {
+            $this->statuscode = 401;
+            $this->data = ["message" => "User not logged in."];
+            return;
+        }
+    
         $userId = $_SESSION['logged_in']['id'];
         $data = json_decode(file_get_contents("php://input"), true);
+    
+        if (!isset($data['listing_id'])) {
+            $this->statuscode = 400;
+            $this->data = ["message" => "Invalid request. Missing listing_id."];
+            return;
+        }
+    
         $listingId = $data['listing_id'];
     
-        $sql = "INSERT INTO cart (userId, listingId)
-                VALUES (?, ?)";
-
+        // Insert into the cart table
+        $sql = "INSERT INTO cart (userId, listingId) VALUES (?, ?)";
         $stmt = $this->prepareStmt($sql);
-        $stmt->bind_param(
-            "ii",
-            $userId,
-            $listingId
-        );
     
-        if($stmt->execute()){
+        if (!$stmt) {
+            $this->statuscode = 500;
+            $this->data = ["message" => "Database error: Failed to prepare statement."];
+            return;
+        }
+    
+        $stmt->bind_param("ii", $userId, $listingId);
+    
+        if ($stmt->execute()) {
             $this->statuscode = 201;
-            $this->data = [
-                "message" => "Item added to cart"
-            ];
+            $this->data = ["message" => "Item added to cart."];
+        } else {
+            $this->statuscode = 500;
+            $this->data = ["message" => "Failed to add item to cart."];
         }
     }
 
@@ -63,9 +79,9 @@ class cart{
 
     $userId = $_SESSION['logged_in']['id'];
 
-    $sql = "SELECT p.name, p.price, c.quantity
+    $sql = "SELECT p.name, p.price
             FROM cart c
-            JOIN listings p ON c.listingId = p.id
+            JOIN listings p ON c.listingId = p.listingId
             WHERE c.userId = ?";
 
     $stmt = $this->prepareStmt($sql);
