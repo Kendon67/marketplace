@@ -39,7 +39,6 @@ class cart{
     public function addToCart() {
         if (!isset($_SESSION['logged_in']['id'])) {
             $this->statuscode = 401;
-            $this->data = ["message" => "User not logged in."];
             return;
         }
     
@@ -48,7 +47,6 @@ class cart{
     
         if (!isset($data['listing_id'])) {
             $this->statuscode = 400;
-            $this->data = ["message" => "Invalid request. Missing listing_id."];
             return;
         }
     
@@ -60,7 +58,6 @@ class cart{
     
         if (!$stmt) {
             $this->statuscode = 500;
-            $this->data = ["message" => "Database error: Failed to prepare statement."];
             return;
         }
     
@@ -68,10 +65,8 @@ class cart{
     
         if ($stmt->execute()) {
             $this->statuscode = 201;
-            $this->data = ["message" => "Item added to cart."];
         } else {
             $this->statuscode = 500;
-            $this->data = ["message" => "Failed to add item to cart."];
         }
     }
 
