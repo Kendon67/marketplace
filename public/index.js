@@ -13,14 +13,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainPage = document.getElementById("main_page");
     const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
 
+    const addToCartButton = document.querySelector(".add_to_cart_btn");
+
     loadListings();
 
+    // adds item to cart when button is clicked
+    addToCartButton.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const product = addToCartButton.getAttribute("data-id"); // Get product ID from the button
+    
+        try {
+            const response = await fetch("/api/cart.php?action=addToCart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    listing_id: product // Send product ID in the request body
+                })
+            });
+    
+            if (response.ok) {
+                alert("Product added to cart!");
+            } else {
+                alert("Failed to add product to cart.");
+            }
+        } catch (error) {
+            alert("Something went wrong.");
+        }
+    });
+    
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
         loginScreen.style.display = "flex";
     });
-
 
     // Open signup screen
     signupButton.addEventListener("click", (e) => {
@@ -44,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // handles signup form submission
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const signupData = new FormData(signupForm);
@@ -71,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // handles login form submission
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const loginData = new FormData(loginForm);
@@ -97,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // loads listings to display on the front page
     async function loadListings() {
         console.log("Loading listings...");
     
@@ -119,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>${listing.description}</p>
                     <p>Category: ${listing.category}</p>
                     <p>Price: £${listing.price}</p>
+                    <button class="add_to_cart_btn" data-id="${listing.id}">Add to Cart</button>
                 `;
     
                 listingContainer.appendChild(card);
@@ -128,6 +159,4 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Listing error:", error);
         }
     }
-    
-    
 });
