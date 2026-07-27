@@ -52,7 +52,7 @@ class cart{
     
         $listingId = $data['listing_id'];
     
-        // Insert into the cart table
+        // insert into cart table
         $sql = "INSERT INTO cart (userId, listingId) VALUES (?, ?)";
         $stmt = $this->prepareStmt($sql);
     
