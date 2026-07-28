@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", async() => {
     const listingContainer = document.getElementById("listing_container");
 
-    const loginButton = document.getElementById("login_button");
+    const loginBtn = document.getElementById("login_button");
     const loginScreen = document.getElementById("login_screen");
-    const loginScreenButton = document.getElementById("loginScreen_button");
+    const loginScreenBtn = document.getElementById("loginScreen_button");
     const loginForm = document.getElementById("login_form")
 
     const signupScreen = document.getElementById("signup_screen");
-    const signupButton = document.getElementById("signupScreen_button");
+    const signupBtn = document.getElementById("signupScreen_button");
     const signupForm = document.getElementById("signup_form");
 
     const mainPage = document.getElementById("main_page");
-    const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
+    const homeBtns = document.querySelectorAll("#home_button, #home_button_signup");
 
-    const cartButton = document.getElementById("cart_button");
+    const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
     const cartItems = document.getElementById("cart_items");
     
@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             });
             if (response.ok) {
                 alert("Product added to cart!");
+                await loadCart();
             } else {
                 alert("Failed to add product to cart.");
             }
@@ -48,20 +49,36 @@ document.addEventListener("DOMContentLoaded", async() => {
     // TODO: add check for user login status before allowing add to cart functionality
 
     
-    loginButton.addEventListener("click", (e) => {
+    loginBtn.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
         loginScreen.style.display = "flex";
     });
 
     // Open signup screen
-    signupButton.addEventListener("click", (e) => {
+    signupBtn.addEventListener("click", (e) => {
         e.preventDefault();
         loginScreen.style.display = "none";
         signupScreen.style.display = "flex";
     });
 
-    cartButton.addEventListener("click", async (e) => {
+    loginScreenBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        signupScreen.style.display = "none";
+        loginScreen.style.display = "flex";
+    });
+
+    // Back home buttons
+    homeBtns.forEach(button => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            loginScreen.style.display = "none";
+            signupScreen.style.display = "none";
+            mainPage.style.display = "block";
+        });
+    });
+
+    cartBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         cartSidebar.classList.toggle("open");
     
@@ -70,20 +87,14 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     });
 
-    loginScreenButton.addEventListener("click", (e) => {
+    cartItems.addEventListener("click", async(e) => {
         e.preventDefault();
-        signupScreen.style.display = "none";
-        loginScreen.style.display = "flex";
-    });
+        if (!e.target.classList.contains("remove_item_button")) {
+            return;
+        }
 
-    // Back home buttons
-    homeButtons.forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
-            loginScreen.style.display = "none";
-            signupScreen.style.display = "none";
-            mainPage.style.display = "block";
-        });
+        const itemToRemove = e.target.dataset.id;
+        await removeFromCart(itemToRemove);
     });
 
     // handles signup form submission
@@ -178,17 +189,22 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             const items = JSON.parse(text);
             cartItems.innerHTML="";
-            
+            let totalPrice = 0;
+
             items.forEach(item => {
                 const itemCard = document.createElement("div");
                 itemCard.className = "listing_card";
+                totalPrice += Number(item.price);
             
                 itemCard.innerHTML = `
                     <h2>${item.name}</h2>
-                    <p>£${Number(item.price).toFixed(2)}</p>`;
+                    <p>£${Number(item.price).toFixed(2)}</p>
+                    <button class="remove_item_button" data-id="${item.listingId}">Remove</button>`;
             
                 cartItems.appendChild(itemCard);
             });
+            document.getElementById("cart_total").textContent = `Total: £${totalPrice.toFixed(2)}`;
+
         } catch (error) {
             console.error("cart error", error);
         }
@@ -202,4 +218,27 @@ document.addEventListener("DOMContentLoaded", async() => {
                 cartItems.innerHTML = "";
             }
     }
+
+    async function removeFromCart(item){
+        try {
+            const response = await fetch("/api/cart.php", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    listing_id: item
+                })
+            });
+    
+            if (response.ok) {
+                await loadCart();
+            } else {
+                console.error("Failed to remove item");
+            }
+    
+        } catch (error) {
+            console.error("remove cart error", error);
+        }
+    }    
 });

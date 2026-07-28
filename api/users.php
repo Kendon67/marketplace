@@ -102,7 +102,7 @@ class users{
     
         $row = $result->fetch_assoc();
         $hashedPassword = $row['password'];
-    
+        
         if (password_verify($password, $hashedPassword)) {
             $_SESSION = []; 
             session_regenerate_id(true);
