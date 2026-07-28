@@ -193,4 +193,13 @@ document.addEventListener("DOMContentLoaded", async() => {
             console.error("cart error", error);
         }
     }
+
+    async function logout(){
+        const response = await fetch ("/api/users.php?action=logout", {
+            method: "POST"});
+        
+            if (response.ok){
+                cartItems.innerHTML = "";
+            }
+    }
 });
