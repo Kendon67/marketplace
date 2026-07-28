@@ -25,11 +25,14 @@ class users{
                 break;
                 
             case 'POST':
-                if ($_GET['action'] === 'addUser') {
+                if($_GET['action'] === 'addUser') {
                     $this->addUser();
-                } elseif ($_GET['action'] === 'checkUser') {
+                } elseif($_GET['action'] === 'checkUser') {
                     $this->checkUser();
-                }else {
+                } elseif($_GET['action'] === 'logout'){
+                    $this->logout();
+                }
+                else {
                     $this->statuscode = 400;
                 }
                 break;
@@ -101,6 +104,8 @@ class users{
         $hashedPassword = $row['password'];
     
         if (password_verify($password, $hashedPassword)) {
+            $_SESSION = []; 
+            session_regenerate_id(true);
             $this->statuscode = 200;
             $this->saveLogin($row['userId']);
         } else {
@@ -144,7 +149,9 @@ class users{
     }
 
     public function logout(){
-        $_SESSION['logged_in'] = null;
+        session_unset();
+        session_destroy();
+        $this->statuscode = 200;
     }
 }
 
