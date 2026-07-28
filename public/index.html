@@ -1,4 +1,4 @@
-<!DOCTPYE hmtl>
+<!DOCTYPE hmtl>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -16,6 +16,7 @@
             <div id="search_bar">
                 <input type="text" id="search_input" placeholder="Search for products..." />
               <button id="login_button">Login</button>
+              <button id="cart_button">Cart</button>
         </div>
     </div>
 
@@ -26,6 +27,17 @@
         <a href="#account" aria-label="Your Account">Your Account</a>
         <a href="#about" aria-label="About">About</a>
       </nav>
+    </div>
+
+      <!-- Card Sidebar -->
+       <div class="sidebar_cart">
+        <div class="cart_content">
+          <div class="cart_header">
+            <h2>Your Cart</h2>
+          </div>
+          <div id="cart_items"></div>
+          <div class="cart_actions"></div>
+       </div>
     </div>
     
     <!-- Product Listings -->

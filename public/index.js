@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
     const listingContainer = document.getElementById("listing_container");
 
     const loginButton = document.getElementById("login_button");
@@ -13,20 +13,61 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainPage = document.getElementById("main_page");
     const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
 
-    loadListings();
+    const cartButton = document.getElementById("cart_button");
+    const cartSidebar = document.querySelector(".sidebar_cart");
+    const cartItems = document.getElementById("cart_items");
+    
+    await loadListings();
 
+    // add to cart button - event listener due to dynamically updating listing container
+    listingContainer.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("add_to_cart_btn")) {
+            return;
+        }
+        const listingId = e.target.dataset.id;
+    
+        try {
+            const response = await fetch("/api/cart.php?action=addToCart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    listing_id: listingId
+                })
+            });
+            if (response.ok) {
+                alert("Product added to cart!");
+            } else {
+                alert("Failed to add product to cart.");
+            }
+        } catch (error) {
+            alert("Something went wrong.");
+        }
+    });
+    // TODO: add check for user login status before allowing add to cart functionality
+
+    
     loginButton.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
         loginScreen.style.display = "flex";
     });
 
-
     // Open signup screen
     signupButton.addEventListener("click", (e) => {
         e.preventDefault();
         loginScreen.style.display = "none";
         signupScreen.style.display = "flex";
+    });
+
+    cartButton.addEventListener("click", async (e) => {
+        e.preventDefault();
+        cartSidebar.classList.toggle("open");
+    
+        if (cartSidebar.classList.contains("open")) {
+            await loadCart();
+        }
     });
 
     loginScreenButton.addEventListener("click", (e) => {
@@ -37,13 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Back home buttons
     homeButtons.forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
             loginScreen.style.display = "none";
             signupScreen.style.display = "none";
             mainPage.style.display = "block";
         });
     });
 
+    // handles signup form submission
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const signupData = new FormData(signupForm);
@@ -71,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // handles login form submission
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const loginData = new FormData(loginForm);
@@ -97,17 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // loads listings to display on the front page
     async function loadListings() {
         console.log("Loading listings...");
     
         try {
             const response = await fetch("/api/product_listings.php");
-    
-            console.log("Status:", response.status);
-    
             const data = await response.json();
-    
-            console.log("Data:", data);
     
             data.results.forEach(listing => {
                 const card = document.createElement("div");
@@ -119,15 +159,38 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>${listing.description}</p>
                     <p>Category: ${listing.category}</p>
                     <p>Price: £${listing.price}</p>
+                    <button class="add_to_cart_btn" data-id="${listing.listingId}">Add to Cart</button>
                 `;
     
                 listingContainer.appendChild(card);
             });
     
         } catch (error) {
-            console.error("Listing error:", error);
+            console.error("Listing error");
         }
     }
-    
-    
+
+    async function loadCart(){
+        try{
+            const response = await fetch ("/api/cart.php");
+            const text = await response.text();
+            console.log(text);
+
+            const items = JSON.parse(text);
+            cartItems.innerHTML="";
+            
+            items.forEach(item => {
+                const itemCard = document.createElement("div");
+                itemCard.className = "listing_card";
+            
+                itemCard.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p>£${Number(item.price).toFixed(2)}</p>`;
+            
+                cartItems.appendChild(itemCard);
+            });
+        } catch (error) {
+            console.error("cart error", error);
+        }
+    }
 });

@@ -142,6 +142,54 @@ transition: background-color 0.3s ease, color 0.3s ease;
   color: white;
 }
 
+/* Sidebar Cart Styling */
+.sidebar_cart {
+  position: fixed;
+  right: 0;
+  top: 100px;
+  width: 300px;
+  height: calc(100vh - 100px);
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar_cart.open {
+  transform: translateX(0);
+}
+
+.cart_content{
+  height:100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart_header{
+  padding: 1rem;
+  display: flex;
+  border-bottom: 1px solid #555;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart_item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart_item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.cart_info {
+  flex: 1;
+}
+
 /* Listing Styling */
 #listing_container {
   display: grid;

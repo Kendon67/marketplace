@@ -131,8 +131,7 @@ class users{
             session_start();
         }
 
-        $_SESSION['logged_in'] = ["id" => $user_id,
-        "username" => $_POST['username']];
+        $_SESSION['logged_in'] = ["id" => $user_id];
     }
 
     public function logged_in(): int|false {
@@ -141,7 +140,7 @@ class users{
             return false;
         }
 
-        return int ($_SESSION['logged_in']);
+        return $_SESSION['logged_in']['id'];
     }
 
     public function logout(){
