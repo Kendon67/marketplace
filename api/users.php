@@ -36,9 +36,14 @@ class users{
                     $this->statuscode = 400;
                 }
                 break;
-
             case 'DELETE':
-                $this->deleteListing();
+                if($_GET['action'] === 'deleteListing') {
+                    $this->deleteListing();
+                } elseif($_GET['action'] === 'deleteUser') {
+                    $this->deleteUser();
+                } else{
+                    $this->$statuscode = 400;
+                }
                 break;
             default:
                 $this->statuscode = 405;
@@ -112,7 +117,32 @@ class users{
             $this->statuscode = 401;
         }
     }
+
+    public function deleteUser(){
+        if (!isset($_SESSION['logged_in']['id'])) {
+            $this->statuscode = 401;
+            return false;
+        }
+
+        $userId = $_SESSION['logged_in']['id'];
+
+        $sql = "DELETE FROM `users` WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+        $stmt->bind_param("i", $userId);
+
+        if ($this->executeStmt($stmt)){
+            session_unset();
+            session_destroy();
+            $this->statuscode = 200;
+            return true;
+        }     
+        return false;
+    }
     
+    // prepare statement for execution
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -123,6 +153,7 @@ class users{
         
     }
 
+    // execute statement
     private function executeStmt(mysqli_stmt $stmt): bool{
         if (!$stmt->execute()) {
             $this->statuscode = 500;
@@ -131,6 +162,7 @@ class users{
         return true;
     }
 
+    // save user login session
     public function saveLogin(int $user_id){
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
