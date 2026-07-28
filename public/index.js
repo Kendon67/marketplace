@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const mainPage = document.getElementById("main_page");
     const homeButtons = document.querySelectorAll("#home_button, #home_button_signup");
+
+    const cartButton = document.getElementById("cart_button");
+    const cartSidebar = document.querySelector(".sidebar_cart");
     
     await loadListings();
 
@@ -55,6 +58,10 @@ document.addEventListener("DOMContentLoaded", async() => {
         e.preventDefault();
         loginScreen.style.display = "none";
         signupScreen.style.display = "flex";
+    });
+
+    cartButton.addEventListener("click", () => {
+        cartSidebar.classList.toggle("open");
     });
 
     loginScreenButton.addEventListener("click", (e) => {
