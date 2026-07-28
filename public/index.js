@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const cartButton = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
+    const cartItems = document.getElementById("cart_items");
     
     await loadListings();
 
@@ -60,8 +61,13 @@ document.addEventListener("DOMContentLoaded", async() => {
         signupScreen.style.display = "flex";
     });
 
-    cartButton.addEventListener("click", () => {
+    cartButton.addEventListener("click", async (e) => {
+        e.preventDefault();
         cartSidebar.classList.toggle("open");
+    
+        if (cartSidebar.classList.contains("open")) {
+            await loadCart();
+        }
     });
 
     loginScreenButton.addEventListener("click", (e) => {
@@ -72,7 +78,8 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     // Back home buttons
     homeButtons.forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
             loginScreen.style.display = "none";
             signupScreen.style.display = "none";
             mainPage.style.display = "block";
@@ -159,7 +166,31 @@ document.addEventListener("DOMContentLoaded", async() => {
             });
     
         } catch (error) {
-            console.error("Listing error:", error);
+            console.error("Listing error");
+        }
+    }
+
+    async function loadCart(){
+        try{
+            const response = await fetch ("/api/cart.php");
+            const text = await response.text();
+            console.log(text);
+
+            const items = JSON.parse(text);
+            cartItems.innerHTML="";
+            
+            items.forEach(item => {
+                const itemCard = document.createElement("div");
+                itemCard.className = "listing_card";
+            
+                itemCard.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p>£${Number(item.price).toFixed(2)}</p>`;
+            
+                cartItems.appendChild(itemCard);
+            });
+        } catch (error) {
+            console.error("cart error", error);
         }
     }
 });

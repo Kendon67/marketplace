@@ -4,6 +4,12 @@ html, body{
   font-family: Arial, sans-serif;
 }
 
+.main_page {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* login/signup screen styling */
 .screen {
   position: fixed;
@@ -165,6 +171,23 @@ transition: background-color 0.3s ease, color 0.3s ease;
   border-bottom: 1px solid #555;
   justify-content: space-between;
   align-items: center;
+}
+
+.cart_item {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart_item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.cart_info {
+  flex: 1;
 }
 
 /* Listing Styling */

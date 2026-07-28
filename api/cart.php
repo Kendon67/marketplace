@@ -74,9 +74,9 @@ class cart{
 
     $userId = $_SESSION['logged_in']['id'];
 
-    $sql = "SELECT p.name, p.price
+    $sql = "SELECT p.listingId, p.name, p.price, p.image
             FROM cart c
-            JOIN listings p ON c.listingId = p.listingId
+            JOIN product_listings p ON c.listingId = p.listingId
             WHERE c.userId = ?";
 
     $stmt = $this->prepareStmt($sql);
