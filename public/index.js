@@ -178,10 +178,12 @@ document.addEventListener("DOMContentLoaded", async() => {
 
             const items = JSON.parse(text);
             cartItems.innerHTML="";
-            
+            let totalPrice = 0;
+
             items.forEach(item => {
                 const itemCard = document.createElement("div");
                 itemCard.className = "listing_card";
+                totalPrice += Number(item.price);
             
                 itemCard.innerHTML = `
                     <h2>${item.name}</h2>
@@ -189,6 +191,8 @@ document.addEventListener("DOMContentLoaded", async() => {
             
                 cartItems.appendChild(itemCard);
             });
+
+            document.getElementById("cart_total").textContent = `Total: £${totalPrice.toFixed(2)}`;
         } catch (error) {
             console.error("cart error", error);
         }
