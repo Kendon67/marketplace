@@ -125,14 +125,21 @@ transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Sidebar links */
-.sidebar a {
+.sidebar button {
   display: block;
   color: black;
   padding: 16px;
   text-decoration: none;
+  width: 100%;
+  border: none;
 }
 
-.sidebar a.active {
+.sidebar button:hover{
+  background-color: #4caf50;
+}
+
+
+.sidebar button.active {
   background-color: #C11C84;
   color: white;
 }
@@ -211,4 +218,10 @@ transition: background-color 0.3s ease, color 0.3s ease;
 
 .listing_card:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Account Page Styling */
+#account_screen {
+  display: none;
+  background-color: #4caf50;
 }

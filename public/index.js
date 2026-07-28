@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const mainPage = document.getElementById("main_page");
     const homeBtns = document.querySelectorAll("#home_button, #home_button_signup");
+    const accountPageBtn = document.getElementById("")
 
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
