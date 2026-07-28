@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async() => {
             });
             if (response.ok) {
                 alert("Product added to cart!");
+                await loadCart();
             } else {
                 alert("Failed to add product to cart.");
             }
