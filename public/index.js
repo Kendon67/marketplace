@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     });
     // TODO: add check for user login status before allowing add to cart functionality
 
-    searchBtn.addEventListener("click", (e) => {
+    searchInput.addEventListener("input", (e) => {
         const searchValue = searchInput.value.toLowerCase();
         const filteredResults = listingsArray.filter(listing =>
             listing.name.toLowerCase().includes(searchValue) ||
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         );
     
         loadListings(filteredResults);
-    });
+    })
 
     loginBtn.addEventListener("click", (e) => {
         e.preventDefault();
