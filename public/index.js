@@ -18,8 +18,13 @@ document.addEventListener("DOMContentLoaded", async() => {
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
     const cartItems = document.getElementById("cart_items");
+
+    const searchInput = document.getElementById("search_input")
+    const searchBtn = document.getElementById("search_button");
+
+    let listingsArray = [];
     
-    await loadListings();
+    await fetchListings();
 
     // add to cart button - event listener due to dynamically updating listing container
     listingContainer.addEventListener("click", async (e) => {
@@ -50,7 +55,17 @@ document.addEventListener("DOMContentLoaded", async() => {
     });
     // TODO: add check for user login status before allowing add to cart functionality
 
+    searchBtn.addEventListener("click", (e) => {
+        const searchValue = searchInput.value.toLowerCase();
+        const filteredResults = listingsArray.filter(listing =>
+            listing.name.toLowerCase().includes(searchValue) ||
+            listing.description.toLowerCase().includes(searchValue) ||
+            listing.category.toLowerCase().includes(searchValue)
+        );
     
+        loadListings(filteredResults);
+    });
+
     loginBtn.addEventListener("click", (e) => {
         e.preventDefault();
         mainPage.style.display = "none";
@@ -80,6 +95,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         });
     });
 
+    // cart functions
     cartBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         cartSidebar.classList.toggle("open");
@@ -159,16 +175,21 @@ document.addEventListener("DOMContentLoaded", async() => {
             console.error("Fetch error");
         }
     });
+    
+    // fetch listings from endpoint for display/searching
+    async function fetchListings(){
+        const response = await fetch("/api/product_listings.php");
+        const data = await response.json();
+        listingsArray = data.results;
+        loadListings(listingsArray)
+    }
 
     // loads listings to display on the front page
-    async function loadListings() {
-        console.log("Loading listings...");
-    
+    async function loadListings(listings) {
         try {
-            const response = await fetch("/api/product_listings.php");
-            const data = await response.json();
-    
-            data.results.forEach(listing => {
+            listingContainer.innerHTML = ""; //set listings to blank to clear when a search is performed
+            // create a card for each listing in the array and append to the container
+            listings.forEach(listing => {
                 const card = document.createElement("div");
                 card.className = "listing_card";
     
@@ -183,12 +204,12 @@ document.addEventListener("DOMContentLoaded", async() => {
     
                 listingContainer.appendChild(card);
             });
-    
         } catch (error) {
             console.error("Listing error");
         }
     }
 
+    // fetch cart from API to display to user
     async function loadCart(){
         try{
             const response = await fetch ("/api/cart.php");
@@ -218,15 +239,7 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     }
 
-    async function logout(){
-        const response = await fetch ("/api/users.php?action=logout", {
-            method: "POST"});
-        
-            if (response.ok){
-                cartItems.innerHTML = "";
-            }
-    }
-
+    // remove item from users cart
     async function removeFromCart(item){
         try {
             const response = await fetch("/api/cart.php", {
@@ -249,4 +262,14 @@ document.addEventListener("DOMContentLoaded", async() => {
             console.error("remove cart error", error);
         }
     }    
+
+
+    async function logout(){
+        const response = await fetch ("/api/users.php?action=logout", {
+            method: "POST"});
+        
+            if (response.ok){
+                cartItems.innerHTML = "";
+            }
+    }
 });
