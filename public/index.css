@@ -71,21 +71,6 @@ html, body{
   justify-content: center;
 }
 
-#search_bar {
-  width: 100%;
-  max-width: 500px;
-}
-
-#search_input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-/* right side */
 .banner_right {
   flex: 1;
   display: flex;
@@ -102,6 +87,22 @@ html, body{
   border-radius: 5px;
   cursor: pointer;
 }
+
+/* Search bar Styling*/
+#search_bar {
+  width: 100%;
+  max-width: 500px;
+}
+
+#search_input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
 
 /* Sidebar Styling */
 .sidebar {

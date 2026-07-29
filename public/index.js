@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const mainPage = document.getElementById("main_page");
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
+    const navButtons = document.querySelectorAll(".nav_button");
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
@@ -19,7 +20,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
 
-    const addListingBtn = document.getElementById("add_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
     const deleteListingBtn = document.getElementById("delete_listing_button");
 
@@ -155,6 +155,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     deleteListingBtn.addEventListener("click", (e) => {
         e.preventDefault(); 
     })
+
+    // change nav button activity depending on which is active
+    navButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            navButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+        });
+    });
 
     // sign user up
     signupForm.addEventListener("submit", async (e) => {
