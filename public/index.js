@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
+    const addListingBtn = document.getElementById("add_listing_button");
+    const deleteListingBtn = document.getElementById("delete_listing_button");
 
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
@@ -142,6 +144,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         listingsPage.style.display = "flex";
 
     });
+
+    addListingBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+    })
+
+    deleteListingBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+    })
 
     // sign user up
     signupForm.addEventListener("submit", async (e) => {
