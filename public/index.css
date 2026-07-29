@@ -61,6 +61,7 @@ html, body{
 }
 
 .banner_left h1 {
+  font-family: 'Monsterrat';
   margin: 0;
   font-size: 1.8rem;
 }
@@ -82,11 +83,13 @@ html, body{
   background-color: white;
   color: #4caf50;
   border: none;
+  font-family: 'Monsterrat';
   padding: 10px 20px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
 }
+
 
 /* Search bar Styling*/
 #search_bar {
@@ -97,12 +100,12 @@ html, body{
 #search_input {
   width: 100%;
   padding: 10px;
+  font-family: 'Monsterrat';
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-sizing: border-box;
 }
-
 
 /* Sidebar Styling */
 .sidebar {
@@ -118,9 +121,11 @@ html, body{
 
 /* Sidebar links */
 .sidebar button {
+  font-family: "Monsterrat";
+  font-size: large;
   display: block;
   color: black;
-  padding: 16px;
+  padding: 20px;
   text-decoration: none;
   width: 100%;
   border: none;
@@ -137,7 +142,7 @@ html, body{
 }
 
 .sidebar a:hover:not(.active) {
-  background-color: #555;
+  background-color: #ddd;
   color: white;
 }
 
@@ -166,6 +171,7 @@ html, body{
 }
 
 .cart_header{
+  font-family: 'Monsterra';
   padding: 1rem;
   display: flex;
   border-bottom: 1px solid #555;
