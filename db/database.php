@@ -3,15 +3,12 @@ class Database{
     private mysqli $database;
     private static ?Database $instance = null;
 
-    private function __construct() {
-        $this->database = new mysqli('localhost', 
-       'cm2252_user', 
-        '.qwertyuiop', 
-        'cm2252_marketDB');
-
-        if ($this->database->connect_error) {
-            die("Connection failed: " . $this->database->connect_error);
-        }
+    private function __construct(){
+        $this->database = new mysqli("localhost", "cm2252_market", ".qwertyuio", "cm2252_marketDB");
+        if ($this->database->connect_errno > 0) {
+            http_response_code(500);
+            exit();
+        } 
     }
 
     public static function getDbInstance(): ?Database{
@@ -21,9 +18,8 @@ class Database{
         return self::$instance;
     }
 
-    public function getConn(){
+    public function getConn(): mysqli{
         return $this->database;
     }
 }
-?>
 
