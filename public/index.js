@@ -18,7 +18,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
+
     const addListingBtn = document.getElementById("add_listing_button");
+    const addListingForm = document.getElementById("add_listing_form");
     const deleteListingBtn = document.getElementById("delete_listing_button");
 
     const cartBtn = document.getElementById("cart_button");
@@ -145,12 +147,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    addListingBtn.addEventListener("click", (e) => {
+    addListingForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        addListing();
     })
 
     deleteListingBtn.addEventListener("click", (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
     })
 
     // sign user up
@@ -175,8 +178,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error(error);
         }
     });
-
-
 
     // log user in - stored in session
     loginForm.addEventListener("submit", async (e) => {
@@ -234,6 +235,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             listingContainer.appendChild(card);
         });
+    }
+
+    async function addListing() {
+        const listingData = new FormData(addListingForm);
+    
+        try {
+            const response = await fetch("/api/product_listings.php", {
+                method: "POST",
+                body: listingData
+            });
+    
+            if (response.status === 201) {
+                alert("Listing successfully created!");
+                addListingForm.reset();
+            } else {
+                alert("Listing creation failed.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async function loadCart() {
