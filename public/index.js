@@ -20,10 +20,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     const cartItems = document.getElementById("cart_items");
 
     const searchInput = document.getElementById("search_input")
-    const searchBtn = document.getElementById("search_button");
-
     let listingsArray = [];
-    
     await fetchListings();
 
     // add to cart button - event listener due to dynamically updating listing container
