@@ -1,5 +1,6 @@
 <?php
 require_once '../db/database.php';
+session_start();
 
 class ProductListings {
     private mysqli $database;
@@ -66,35 +67,40 @@ class ProductListings {
 
 
     public function addListing(){
-        $this->statuscode = 400;
-        if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
-        || !isset($_POST['category']) || !isset($_POST['image'])) {
+        if (!isset($_SESSION['logged_in'])) {
+            $this->statuscode = 401;
             return;
         }
         
-        // sql injection prevention
+        $userId = $_SESSION['logged_in']['id'];
+
+        if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
+        || !isset($_POST['category']) || !isset($_POST['image'])) {
+    
+            $this->statuscode = 400;
+            return;
+        }
+    
         $name = htmlspecialchars(strip_tags(trim($_POST['name'])));
         $description = htmlspecialchars(strip_tags(trim($_POST['description'])));
         $price = (float)$_POST['price'];
         $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
         $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
-
-        $sql = "INSERT INTO `product_listings`(name, description, price, category, image) VALUES (?,?,?,?,?);";
+    
+        $sql = "INSERT INTO `product_listings` 
+                (userId, name, description, price, category, image) 
+                VALUES (?, ?, ?, ?, ?, ?);";
+    
         $stmt = $this->prepareStmt($sql);
+    
         if (!$stmt) {
             return;
         }
-
-        $stmt->bind_param("ssdss", $name, $description, $price, $category, $image);
+    
+        $stmt->bind_param("issdss", $userId, $name, $description, $price, $category, $image);
+    
         if ($this->executeStatement($stmt)) {
             $this->statuscode = 201;
-            $this->data = ["listingId" => $stmt->insert_id,
-                "name" => $name,
-                "description" => $description,
-                "price" => $price,
-                "category" => $category,
-                "image" => $image
-            ];
         }
     }
 
