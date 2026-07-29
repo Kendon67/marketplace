@@ -46,61 +46,63 @@ html, body{
 /* Banner Styling */
 .banner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background: linear-gradient(90deg, #FFC5D3, #fabccb);
   color: white;
-  padding:  20px 40px;
+  border-bottom: black solid 1px;
+  padding: 20px 40px;
   height: 100px;
   box-sizing: border-box;
 }
 
-.banner_content {
-  font-size: 1.8rem;
-  max-width: 800px;
-  margin: 0 auto;
+.banner_left {
+  flex: 1;
 }
 
-.banner h1 {
-  font-size: 1.8rem;
+.banner_left h1 {
   margin: 0;
-  text-align: start;
+  font-size: 1.8rem;
 }
 
-.banner p {
-  font-size: 1.2rem;
-  margin: 10px 0 20px;
+.banner_middle {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.banner_right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .banner button {
-background-color: white;
-color: #4caf50;
-border: none;
-padding: 10px 20px;
-font-size: 1rem;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: white;
+  color: #4caf50;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Search Bar Styles - UPDATE THIS ITS ALL FUCKED*/ 
+/* Search bar Styling*/
 #search_bar {
-  display: flex;
-  align-items: center;
-  border-radius: 50px;
-  overflow: hidden;
-  background-color: white;
-  border: none;
+  width: 100%;
+  max-width: 500px;
 }
 
 #search_input {
-  border-radius: 50px 0 0 50px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-.button:hover {
-  background-color: #4caf50;
-  color: white;
-}
 
 /* Sidebar Styling */
 .sidebar {
@@ -111,7 +113,7 @@ transition: background-color 0.3s ease, color 0.3s ease;
   top: 100px;
   left: 0px;
   height: 100%;
-  overflow: auto;
+  border-right: solid black 1px;;
 }
 
 /* Sidebar links */
