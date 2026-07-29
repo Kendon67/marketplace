@@ -22,7 +22,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
 
+    const createListingBtn = document.getElementById("create_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
+    const userListingsContainer = document.getElementById("user_listings_container");
     const deleteListingBtn = document.getElementById("delete_listing_button");
 
     const cartBtn = document.getElementById("cart_button");
@@ -75,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             listing.category.toLowerCase().includes(searchValue)
         );
 
-        loadListings(filteredResults);
+        loadListings(filteredResults, listingContainer);
     });
 
     // opens login screen
@@ -138,10 +140,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
       // open user's listings page
-      listingsPageBtn.addEventListener("click", (e) => {
+      listingsPageBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
+
+        await fetchUserListings();
     });
 
     // open account page
@@ -230,15 +234,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch("/api/product_listings.php");
             const data = await response.json();
+
             listingsArray = data.results;
-            loadListings(listingsArray);
+            loadListings(listingsArray, listingContainer);
         } catch (error) {
             console.error("Fetching listings failed:", error);
         }
     }
 
-    async function loadListings(listings) {
-        listingContainer.innerHTML = "";
+    async function loadListings(listings, container) {
+        container.innerHTML = "";
         listings.forEach(listing => {
             const card = document.createElement("div");
             card.className = "listing_card";
@@ -254,8 +259,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </button>
             `;
 
-            listingContainer.appendChild(card);
+            container.appendChild(card);
         });
+    }
+
+    async function fetchUserListings() {
+        const response = await fetch("/api/product_listings.php?action=userListings");
+        const data = await response.json();
+    
+        loadListings(data.results, userListingsContainer);
     }
 
     async function addListing() {

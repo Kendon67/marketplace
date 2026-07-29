@@ -20,7 +20,11 @@ class ProductListings {
         header('Content-Type: application/json');
         switch($method){
             case 'GET':
-                $this->getListings();
+                if (isset($_GET['action']) && $_GET['action'] === "userListings") {
+                    $this->getUserListings();
+                } else {
+                    $this->getListings();
+                }
                 break;
             case 'POST':
                 $this->addListing();
@@ -49,6 +53,31 @@ class ProductListings {
         if (!$stmt) {
             return;
         }
+
+        if ($this->executeStatement($stmt)) {
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                $this->statuscode = 200;
+                $this->data = ["results" => $result->fetch_all(MYSQLI_ASSOC)];
+            } else {
+                $this->statuscode = 204;
+            }
+        }
+    }
+
+       // retrieves all listings in db 
+    public function getUserListings(){
+        $userId = $this->getUserId();
+
+        $sql = "SELECT listingId, name, description, price, category, image, dateCreated 
+        FROM `product_listings`
+        WHERE userId = ?";
+
+        $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+        $stmt->bind_param("i", $userId);
 
         if ($this->executeStatement($stmt)) {
             $result = $stmt->get_result();
@@ -121,6 +150,15 @@ class ProductListings {
             $this->statuscode = 500;
             return false;
         }
+    }
+
+    public function getUserId(){
+        if (!isset($_SESSION['logged_in'])) {
+            $this->statuscode = 401;
+            return;
+        }
+    
+        return $_SESSION['logged_in']['id'];
     }
 }
 
