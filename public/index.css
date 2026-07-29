@@ -83,7 +83,7 @@ cursor: pointer;
 transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Search Bar Styles */
+/* Search Bar Styles - UPDATE THIS ITS ALL FUCKED*/ 
 #search_bar {
   display: flex;
   align-items: center;
