@@ -151,12 +151,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = 'flex';
     });
 
+    // open about section
     aboutPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
         hideAllPages();
         aboutPage.style.display = 'flex';
     });
-    
+
     addListingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         addListing();
@@ -338,5 +339,4 @@ document.addEventListener("DOMContentLoaded", async () => {
         loginScreen.style.display = "none";
         signupScreen.style.display = "none";
     }
-    
 });
