@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mainPage = document.getElementById("main_page");
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
     const navButtons = document.querySelectorAll(".nav_button");
+    const homeNavBtn = document.getElementById("home_screen_button");
+    const aboutPageBtn = document.getElementById("account_screen_button");
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
@@ -128,25 +130,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         await removeFromCart(e.target.dataset.id);
     });
 
+    // open user's listings page
+    homeNavBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideAllPages();
+        mainPage.style.display = 'block';
+    });
+
+      // open user's listings page
+      listingsPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideAllPages();
+        listingsPage.style.display = 'flex';
+    });
+
     // open account page
     accountPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("Account clicked");
-        mainPage.style.display = "none";
-        listingsPage.style.display = "none";
-        accountPage.style.display = "flex";
+        hideAllPages();
+        accountPage.style.display = 'flex';
     });
 
-    // open user's listings page
-    listingsPageBtn.addEventListener("click", (e) => {
+    aboutPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("Listings clicked");
-        mainPage.style.display = "none";
-        accountPage.style.display = "none";
-        listingsPage.style.display = "flex";
-
+        hideAllPages();
+        aboutPage.style.display = 'flex';
     });
-
+    
     addListingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         addListing();
@@ -320,4 +330,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Remove cart error:", error);
         }
     }
+
+    function hideAllPages(){
+        mainPage.style.display = "none";
+        listingsPage.style.display = "none";
+        accountPage.style.display = "none";
+        loginScreen.style.display = "none";
+        signupScreen.style.display = "none";
+    }
+    
 });
