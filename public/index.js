@@ -12,8 +12,10 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     const mainPage = document.getElementById("main_page");
     const homeBtns = document.querySelectorAll("#home_button, #home_button_signup");
-    const accountPageBtn = document.getElementById("account_page_button");
     const accountPage = document.getElementById("account_screen");
+    const accountPageBtn = document.getElementById("account_screen_button");
+    const listingsPage = document.getElementById("listings_screen");
+    const listingsPageBtn = document.getElementById("listings_screen_button");
 
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
@@ -114,8 +116,15 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     accountPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
+        console.log("clicked!");
         mainPage.style.display = "none";
         accountPage.style.display = "flex";
+    });
+
+    listingsPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        mainPage.style.display = "none";
+        listingsPage.style.display = "flex";
     });
 
     // handles signup form submission
