@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
     const navButtons = document.querySelectorAll(".nav_button");
     const homeNavBtn = document.getElementById("home_screen_button");
-    const aboutPageBtn = document.getElementById("account_screen_button");
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
@@ -22,8 +21,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
 
+    const aboutPage = document.getElementById("about_screen");
+    const aboutPageBtn = document.getElementById("about_screen_button");
+
+    const createListingBtn = document.getElementById("create_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
-    const deleteListingBtn = document.getElementById("delete_listing_button");
+    const userListingsContainer = document.getElementById("user_listings_container");
 
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
@@ -75,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             listing.category.toLowerCase().includes(searchValue)
         );
 
-        loadListings(filteredResults);
+        loadListings(filteredResults, listingContainer);
     });
 
     // opens login screen
@@ -137,11 +140,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         mainPage.style.display = 'block';
     });
 
-      // open user's listings page
-      listingsPageBtn.addEventListener("click", (e) => {
+    // open user's listings page
+    listingsPageBtn.addEventListener("click", async (e) => {
+        console.log("clicked");
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
+
+        await fetchUserListings();
     });
 
     // open account page
@@ -151,20 +157,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = 'flex';
     });
 
-    aboutPageBtn.addEventListener("click", (e) => {
+    // open add listing form
+    createListingBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        hideAllPages();
-        aboutPage.style.display = 'flex';
-    });
-    
+        addListingForm.style.display = 'block';
+    })
+
+    // create listing upon form submission
     addListingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         addListing();
     })
 
-    deleteListingBtn.addEventListener("click", (e) => {
-        e.preventDefault(); 
-    })
+    // delete listing, dynamic event listener
+    userListingsContainer.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("delete_listing_btn")) {
+            return;
+        }
+    
+        const listingId = e.target.dataset.id;
+    
+        await deleteListing(listingId);
+    });
 
     // change nav button activity depending on which is active
     navButtons.forEach(button => {
@@ -230,32 +244,48 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch("/api/product_listings.php");
             const data = await response.json();
+
             listingsArray = data.results;
-            loadListings(listingsArray);
+            loadListings(listingsArray, listingContainer);
         } catch (error) {
             console.error("Fetching listings failed:", error);
         }
     }
 
-    async function loadListings(listings) {
-        listingContainer.innerHTML = "";
+    async function loadListings(listings, container, isUserListings = false) {
+        console.log("isUserListings:", isUserListings);
+        container.innerHTML = "";
         listings.forEach(listing => {
             const card = document.createElement("div");
             card.className = "listing_card";
 
             card.innerHTML = `
-                <img src="${listing.image}" alt="${listing.name}">
-                <h2>${listing.name}</h2>
-                <p>${listing.description}</p>
-                <p>Category: ${listing.category}</p>
-                <p>Price: £${listing.price}</p>
-                <button class="add_to_cart_btn" data-id="${listing.listingId}">
-                    Add to Cart
-                </button>
-            `;
+            <img src="${listing.image}" alt="${listing.name}">
+            <h2>${listing.name}</h2>
+            <p>${listing.description}</p>
+            <p>Category: ${listing.category}</p>
+            <p>Price: £${listing.price}</p>
 
-            listingContainer.appendChild(card);
+            ${
+                isUserListings
+                    ? `<button class="delete_listing_btn" data-id="${listing.listingId}">
+                           Delete Listing
+                       </button>`
+                    : `<button class="add_to_cart_btn" data-id="${listing.listingId}">
+                           Add to Cart
+                       </button>`
+            }
+        `;
+
+            container.appendChild(card);
         });
+    }
+
+    async function fetchUserListings() {
+        const response = await fetch("/api/product_listings.php?action=userListings");
+        const data = await response.json();
+    
+        loadListings(data.results, userListingsContainer, true);
     }
 
     async function addListing() {
@@ -270,8 +300,32 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.status === 201) {
                 alert("Listing successfully created!");
                 addListingForm.reset();
+                await fetchUserListings();
             } else {
                 alert("Listing creation failed.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function deleteListing(listingId) {
+        try {
+            const response = await fetch("/api/product_listings.php", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({
+                    listing_id: listingId
+                })
+            });
+    
+            if (response.ok) {
+                alert("Listing successfully deleted!");
+                await fetchUserListings();
+            } else {
+                alert("Listing deletion failed.");
             }
         } catch (error) {
             console.error(error);
