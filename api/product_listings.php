@@ -96,7 +96,7 @@ class ProductListings {
 
 
     public function addListing(){
-        $userId = getUserId();
+        $userId = $this->getUserId();
 
         if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
         || !isset($_POST['category']) || !isset($_POST['image'])) {
@@ -192,11 +192,9 @@ class ProductListings {
 
 $api = new ProductListings();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
-/** TODO: 
+/* TODO: 
  * Add error handling to database conn and queries
- * FIX ADDING LISTINGS
- *  */
-
+ * FIX ADDING LISTINGS */
 ?>
 
 

@@ -323,7 +323,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     
             if (response.ok) {
                 alert("Listing successfully deleted!");
-                addListingForm.reset();
                 await fetchUserListings();
             } else {
                 alert("Listing deletion failed.");
