@@ -1,3 +1,4 @@
+console.log("INDEX JS UPDATED");
 document.addEventListener("DOMContentLoaded", async () => {
     const listingContainer = document.getElementById("listing_container");
 
@@ -14,13 +15,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
     const navButtons = document.querySelectorAll(".nav_button");
     const homeNavBtn = document.getElementById("home_screen_button");
-    const aboutPageBtn = document.getElementById("account_screen_button");
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
 
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
+
+    const aboutPage = document.getElementById("about_screen");
+    const aboutPageBtn = document.getElementById("about_screen_button");
 
     const createListingBtn = document.getElementById("create_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
@@ -139,8 +142,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         mainPage.style.display = 'block';
     });
 
-      // open user's listings page
-      listingsPageBtn.addEventListener("click", async (e) => {
+    // open user's listings page
+    listingsPageBtn.addEventListener("click", async (e) => {
+        console.log("clicked");
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
@@ -153,12 +157,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         accountPage.style.display = 'flex';
-    });
-
-    aboutPageBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        hideAllPages();
-        aboutPage.style.display = 'flex';
     });
     
     addListingForm.addEventListener("submit", (e) => {
@@ -242,22 +240,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function loadListings(listings, container) {
+    async function loadListings(listings, container, isUserListings = false) {
+        console.log("isUserListings:", isUserListings);
         container.innerHTML = "";
         listings.forEach(listing => {
             const card = document.createElement("div");
             card.className = "listing_card";
 
             card.innerHTML = `
-                <img src="${listing.image}" alt="${listing.name}">
-                <h2>${listing.name}</h2>
-                <p>${listing.description}</p>
-                <p>Category: ${listing.category}</p>
-                <p>Price: £${listing.price}</p>
-                <button class="add_to_cart_btn" data-id="${listing.listingId}">
-                    Add to Cart
-                </button>
-            `;
+            <img src="${listing.image}" alt="${listing.name}">
+            <h2>${listing.name}</h2>
+            <p>${listing.description}</p>
+            <p>Category: ${listing.category}</p>
+            <p>Price: £${listing.price}</p>
+
+            ${
+                isUserListings
+                    ? `<button class="delete_listing_btn" data-id="${listing.listingId}">
+                           Delete Listing
+                       </button>`
+                    : `<button class="add_to_cart_btn" data-id="${listing.listingId}">
+                           Add to Cart
+                       </button>`
+            }
+        `;
 
             container.appendChild(card);
         });
@@ -267,7 +273,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const response = await fetch("/api/product_listings.php?action=userListings");
         const data = await response.json();
     
-        loadListings(data.results, userListingsContainer);
+        loadListings(data.results, userListingsContainer, true);
     }
 
     async function addListing() {
