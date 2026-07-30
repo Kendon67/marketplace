@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
+    const deleteAccountBtn = document.getElementById("delete_account_button");
+    const changeEmailBtn = document.getElementById("change_email_button");
+    const changeUsernameBtn = document.getElementById("change_username_button");
+    const changePasswordBtn = document.getElementById("change_password_button");
 
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
