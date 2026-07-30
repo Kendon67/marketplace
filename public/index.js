@@ -1,4 +1,3 @@
-console.log("INDEX JS UPDATED");
 document.addEventListener("DOMContentLoaded", async () => {
     const listingContainer = document.getElementById("listing_container");
 
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const createListingBtn = document.getElementById("create_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
     const userListingsContainer = document.getElementById("user_listings_container");
-    const deleteListingBtn = document.getElementById("delete_listing_button");
 
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
@@ -158,15 +156,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         hideAllPages();
         accountPage.style.display = 'flex';
     });
-    
+
+    // open add listing form
+    createListingBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        addListingForm.style.display = 'block';
+    })
+
+    // create listing upon form submission
     addListingForm.addEventListener("submit", (e) => {
         e.preventDefault();
         addListing();
     })
 
-    deleteListingBtn.addEventListener("click", (e) => {
-        e.preventDefault(); 
-    })
+    // delete listing, dynamic event listener
+    userListingsContainer.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("delete_listing_btn")) {
+            return;
+        }
+    
+        const listingId = e.target.dataset.id;
+    
+        await deleteListing(listingId);
+    });
 
     // change nav button activity depending on which is active
     navButtons.forEach(button => {
@@ -288,8 +300,32 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.status === 201) {
                 alert("Listing successfully created!");
                 addListingForm.reset();
+                await fetchUserListings();
             } else {
                 alert("Listing creation failed.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function deleteListing(listingId) {
+        try {
+            const response = await fetch("/api/product_listings.php", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({
+                    listing_id: listingId
+                })
+            });
+    
+            if (response.ok) {
+                alert("Listing successfully deleted!");
+                addListingForm.reset();
+            } else {
+                alert("Listing deletion failed.");
             }
         } catch (error) {
             console.error(error);

@@ -65,7 +65,7 @@ class ProductListings {
         }
     }
 
-       // retrieves all listings in db 
+    // retrieves all listings in db 
     public function getUserListings(){
         $userId = $this->getUserId();
 
@@ -96,12 +96,7 @@ class ProductListings {
 
 
     public function addListing(){
-        if (!isset($_SESSION['logged_in'])) {
-            $this->statuscode = 401;
-            return;
-        }
-        
-        $userId = $_SESSION['logged_in']['id'];
+        $userId = getUserId();
 
         if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
         || !isset($_POST['category']) || !isset($_POST['image'])) {
@@ -132,6 +127,39 @@ class ProductListings {
             $this->statuscode = 201;
         }
     }
+    
+    public function deleteListing() {
+        if (!isset($_SESSION['logged_in'])) {
+            $this->statuscode = 401;
+            return;
+        }
+    
+        $userId = $_SESSION['logged_in']['id'];
+        $data = json_decode(file_get_contents("php://input"), true);
+    
+        if (!isset($data['listing_id'])) {
+            $this->statuscode = 400;
+            return;
+        }
+    
+        $listingId = $data['listing_id'];
+    
+        $sql = "DELETE FROM product_listings 
+                WHERE listingId = ? AND userId = ?";
+    
+        $stmt = $this->prepareStmt($sql);
+    
+        if (!$stmt) {
+            return;
+        }
+    
+        $stmt->bind_param("ii", $listingId, $userId);
+    
+        if ($this->executeStatement($stmt)) {
+            $this->statuscode = 200;
+        }
+    }
+    
 
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
@@ -166,6 +194,7 @@ $api = new ProductListings();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 /** TODO: 
  * Add error handling to database conn and queries
+ * FIX ADDING LISTINGS
  *  */
 
 ?>

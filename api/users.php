@@ -37,13 +37,7 @@ class users{
                 }
                 break;
             case 'DELETE':
-                if($_GET['action'] === 'deleteListing') {
-                    $this->deleteListing();
-                } elseif($_GET['action'] === 'deleteUser') {
-                    $this->deleteUser();
-                } else{
-                    $this->$statuscode = 400;
-                }
+                $this->deleteUser();
                 break;
             default:
                 $this->statuscode = 405;
