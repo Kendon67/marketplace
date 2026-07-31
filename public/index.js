@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
+    const deleteAccountBtn = document.getElementById("delete_account_button");
+    const changeEmailBtn = document.getElementById("change_email_button");
+    const changeUsernameBtn = document.getElementById("change_username_button");
+    const changePasswordBtn = document.getElementById("change_password_button");
 
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
@@ -156,6 +160,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         hideAllPages();
         accountPage.style.display = 'flex';
     });
+
+    deleteAccountBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const confirmed = confirm("Are you sure you want to delete your account? This action cannot be undone afterwards.");
+        if(confirmed){
+            await deleteUser();
+        }
+    })
 
     // open add listing form
     createListingBtn.addEventListener("click", (e) => {
@@ -376,12 +388,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                     listing_id: item
                 })
             });
-
             if (response.ok) {
                 await loadCart();
             }
         } catch (error) {
-            console.error("Remove cart error:", error);
+            console.error("Remove cart error");
+        }
+    }
+
+    async function deleteUser(){
+        try {
+            const response = await fetch("/api/users.php", {
+                method: "DELETE"
+            });
+
+            if(response.ok){
+                alert("Account Deleted Successfully!");
+                window.location.reload();
+            }
+    
+        } catch(error){
+            console.error(error);
         }
     }
 

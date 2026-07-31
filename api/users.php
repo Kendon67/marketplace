@@ -113,26 +113,30 @@ class users{
     }
 
     public function deleteUser(){
-        if (!isset($_SESSION['logged_in']['id'])) {
-            $this->statuscode = 401;
-            return false;
-        }
-
-        $userId = $_SESSION['logged_in']['id'];
-
+        $userId = $this->getUserId();
         $sql = "DELETE FROM `users` WHERE userId = ?";
         $stmt = $this->prepareStmt($sql);
+
         if (!$stmt) {
-            return;
+            $this->statuscode = 500;
+            return false;
         }
         $stmt->bind_param("i", $userId);
-
-        if ($this->executeStmt($stmt)){
+    
+        if (!$stmt->execute()) {
+            $this->statuscode = 500;
+            return false;
+        }
+    
+        if ($stmt->affected_rows > 0) {
             session_unset();
             session_destroy();
+    
             $this->statuscode = 200;
             return true;
-        }     
+        }
+    
+        $this->statuscode = 404;
         return false;
     }
     
@@ -165,8 +169,7 @@ class users{
         $_SESSION['logged_in'] = ["id" => $user_id];
     }
 
-    public function logged_in(): int|false {
-
+    public function getUserId(){
         if (!isset ($_SESSION['logged_in'])) {
             return false;
         }
