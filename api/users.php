@@ -17,6 +17,7 @@ class users{
         $this->database->close();
     }
 
+    // handle requests made to the user API
     public function handle_request($method){
         header('Content-Type: application/json');
         switch($method){
@@ -49,6 +50,7 @@ class users{
         }
     }
 
+    // add the user into database
     public function addUser(){
         if (!isset($_POST['username']) || !isset($_POST['email']) || !isset($_POST['password'])) {
             $this->statuscode = 400;
@@ -71,6 +73,7 @@ class users{
         }
     }
 
+    // check the user exists in the database
     public function checkUser(){
         if (!isset($_POST['email']) || !isset($_POST['password'])) {
             $this->statuscode = 400;
@@ -112,6 +115,7 @@ class users{
         }
     }
 
+    // delete the user from the database
     public function deleteUser(){
         $userId = $this->getUserId();
         $sql = "DELETE FROM `users` WHERE userId = ?";
@@ -186,5 +190,4 @@ class users{
 
 $api = new users();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
-
 ?>

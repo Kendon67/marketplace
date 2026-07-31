@@ -1,42 +1,47 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const listingContainer = document.getElementById("listing_container");
 
+    // login elements
     const loginBtn = document.getElementById("login_button");
     const loginScreen = document.getElementById("login_screen");
     const loginScreenBtn = document.getElementById("loginScreen_button");
     const loginForm = document.getElementById("login_form");
 
+    // signup elements
     const signupScreen = document.getElementById("signup_screen");
     const signupBtn = document.getElementById("signupScreen_button");
     const signupForm = document.getElementById("signup_form");
 
+    // home page elements
     const mainPage = document.getElementById("main_page");
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
     const navButtons = document.querySelectorAll(".nav_button");
     const homeNavBtn = document.getElementById("home_screen_button");
+    const searchInput = document.getElementById("search_input");
 
+    // account page elements
     const accountPage = document.getElementById("account_screen");
     const accountPageBtn = document.getElementById("account_screen_button");
     const deleteAccountBtn = document.getElementById("delete_account_button");
     const changeEmailBtn = document.getElementById("change_email_button");
     const changeUsernameBtn = document.getElementById("change_username_button");
     const changePasswordBtn = document.getElementById("change_password_button");
-
-    const listingsPage = document.getElementById("listings_screen");
-    const listingsPageBtn = document.getElementById("listings_screen_button");
-
-    const aboutPage = document.getElementById("about_screen");
-    const aboutPageBtn = document.getElementById("about_screen_button");
-
     const createListingBtn = document.getElementById("create_listing_button");
     const addListingForm = document.getElementById("add_listing_form");
     const userListingsContainer = document.getElementById("user_listings_container");
 
+    // listing page elements
+    const listingsPage = document.getElementById("listings_screen");
+    const listingsPageBtn = document.getElementById("listings_screen_button");
+
+    // about page elements
+    const aboutPage = document.getElementById("about_screen");
+    const aboutPageBtn = document.getElementById("about_screen_button");
+
+    // cart elements
     const cartBtn = document.getElementById("cart_button");
     const cartSidebar = document.querySelector(".sidebar_cart");
     const cartItems = document.getElementById("cart_items");
-
-    const searchInput = document.getElementById("search_input");
 
     let listingsArray = [];
     listingContainer.addEventListener("click", async (e) => {
@@ -65,7 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
         } catch (error) {
-            console.error(error);
             alert("Something went wrong.");
         }
     });
@@ -146,7 +150,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // open user's listings page
     listingsPageBtn.addEventListener("click", async (e) => {
-        console.log("clicked");
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
@@ -161,6 +164,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = 'flex';
     });
 
+    // delete current logged in account
     deleteAccountBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         const confirmed = confirm("Are you sure you want to delete your account? This action cannot be undone afterwards.");
@@ -188,7 +192,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     
         const listingId = e.target.dataset.id;
-    
         await deleteListing(listingId);
     });
 
@@ -222,7 +225,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Account creation failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Account creation failed.");
         }
     });
 
@@ -245,12 +248,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Invalid Username or Password");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Login Error");
         }
 
     });
 
-    // load product listings to be displayed to users
+    // fetch product listings from api
     await fetchListings();
     async function fetchListings() {
         try {
@@ -260,10 +264,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             listingsArray = data.results;
             loadListings(listingsArray, listingContainer);
         } catch (error) {
-            console.error("Fetching listings failed:", error);
+            alert("Something Went Wrong. Please Reload Page");
+            console.error("Listings Display Error");
         }
     }
 
+    // load listings for display to user
     async function loadListings(listings, container, isUserListings = false) {
         console.log("isUserListings:", isUserListings);
         container.innerHTML = "";
@@ -293,6 +299,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    // fetch listings specific to the user
     async function fetchUserListings() {
         const response = await fetch("/api/product_listings.php?action=userListings");
         const data = await response.json();
@@ -300,6 +307,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         loadListings(data.results, userListingsContainer, true);
     }
 
+    // add listing to database
     async function addListing() {
         const listingData = new FormData(addListingForm);
     
@@ -317,10 +325,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Listing creation failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Add Listing Error")
         }
     }
 
+    // delete listing from database
     async function deleteListing(listingId) {
         try {
             const response = await fetch("/api/product_listings.php", {
@@ -340,10 +350,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Listing deletion failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Listing Deletion Error");
         }
     }
 
+    // fetch cart from database and load
     async function loadCart() {
         try {
             const response = await fetch("/api/cart.php");
@@ -371,7 +383,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             document.getElementById("cart_total").textContent =`Total: £${totalPrice.toFixed(2)}`;
         } catch (error) {
-            console.error("Cart error:", error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Loading Cart Error");
         }
 
     }
@@ -396,6 +409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // delete user from database
     async function deleteUser(){
         try {
             const response = await fetch("/api/users.php", {
@@ -405,13 +419,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             if(response.ok){
                 alert("Account Deleted Successfully!");
                 window.location.reload();
+            } else{
+                alert("Account Deletion Failed");
             }
     
         } catch(error){
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("User Deletion Error");
         }
     }
 
+    // hide all pages 
     function hideAllPages(){
         mainPage.style.display = "none";
         listingsPage.style.display = "none";
