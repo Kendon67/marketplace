@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         mainPage.style.display = 'block';
-        updateBanner("MARKET", true, true);
+        updateBanner("MARKET", true, true, true);
     });
 
     // open user's listings page
@@ -448,12 +448,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         signupScreen.style.display = "none";
     }
 
-    function updateBanner(title, showSearch = false, showLogin = false) {
+    function updateBanner(title, showSearch = false, showLogin = false, showCart = false) {
         bannerText.innerHTML = "";
         bannerText.innerHTML = title;
     
         searchBar.style.display = showSearch ? "flex" : "none";
         loginBtn.style.display = showLogin ? "flex" : "none";
+        cartBtn.style.display = showCart ? "flex" : "none";
     }
     
 });
