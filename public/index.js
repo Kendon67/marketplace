@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         mainPage.style.display = 'block';
-        updateBanner("MARKET", true, true, true);
+        updateBanner("MARKET", true, true, true, false);
     });
 
     // open user's listings page
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
-        updateBanner("Your Listings")
+        updateBanner("Your Listings", false , false, false, true);
 
         await fetchUserListings();
     });
@@ -448,13 +448,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         signupScreen.style.display = "none";
     }
 
-    function updateBanner(title, showSearch = false, showLogin = false, showCart = false) {
+    function updateBanner(title, showSearch = false, showLogin = false, showCart = false, showCreateListing = false) {
         bannerText.innerHTML = "";
         bannerText.innerHTML = title;
     
         searchBar.style.display = showSearch ? "flex" : "none";
         loginBtn.style.display = showLogin ? "flex" : "none";
         cartBtn.style.display = showCart ? "flex" : "none";
+        createListingBtn.style.display = showCreateListing ? "flex" : "none";
     }
     
 });

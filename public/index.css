@@ -239,6 +239,10 @@ html, body{
   display: none;
 }
 
+#create_listing_button{
+  display: none;
+}
+
 /* Account Page Styling */
 #account_screen {
   display: none;
