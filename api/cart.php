@@ -17,6 +17,7 @@ class cart{
         $this->database->close();
     }
 
+    // handle requests made to the cart API
     public function handle_request($method){
         header('Content-Type: application/json');
         switch($method){
@@ -65,6 +66,7 @@ class cart{
         }       
     }
 
+    // get cart from database
     public function getCart(){
         $userId = $this->checkLoggedIn();
         if ($userId === false) {
@@ -89,6 +91,7 @@ class cart{
         }
     }
 
+    // remove specified item from cart
     public function removeFromCart(){
         $data = json_decode(file_get_contents("php://input"), true);
         $userId = $this->checkLoggedIn();
@@ -114,6 +117,7 @@ class cart{
         }       
     }
     
+    // prepare sql statements for execution
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -123,6 +127,7 @@ class cart{
         return $stmt;
     }
 
+    // execute sql statements
     private function executeStmt(mysqli_stmt $stmt): bool{
         if (!$stmt->execute()) {
             $this->statuscode = 500;
@@ -131,6 +136,7 @@ class cart{
         return true;
     }
 
+    // check the id of the logged in user
     private function checkLoggedIn(){
         if (!isset($_SESSION['logged_in']['id'])) {
             $this->statuscode = 401;

@@ -16,6 +16,7 @@ class ProductListings {
         $this->database->close();
     }
 
+    // handle requests made to the product_listings API
     public function handle_request($method){
         header('Content-Type: application/json');
         switch($method){
@@ -47,7 +48,6 @@ class ProductListings {
     public function getListings(){
         $this->statuscode = 400;
 
-        // create statement for db retrieval
         $sql = "SELECT listingId, name, description, price, category, image, dateCreated FROM `product_listings`;";
         $stmt = $this->prepareStmt($sql);
         if (!$stmt) {
@@ -90,11 +90,12 @@ class ProductListings {
         }
     }
 
+    // gets the id of a listing
     public function getListingId(){
         $sql = "SELECT id FROM product_listings WHERE name = ?";
     }
 
-
+    // add a listing to the database
     public function addListing(){
         $userId = $this->getUserId();
 
@@ -128,6 +129,7 @@ class ProductListings {
         }
     }
     
+    // delete a listing from the database
     public function deleteListing() {
         if (!isset($_SESSION['logged_in'])) {
             $this->statuscode = 401;
@@ -160,7 +162,7 @@ class ProductListings {
         }
     }
     
-
+    // prepare statement for execution
     private function prepareStmt(string $sql): mysqli_stmt|false{
         $stmt = $this->database->prepare($sql);
         if (!$stmt) {
@@ -171,6 +173,7 @@ class ProductListings {
         
     }
 
+    // execute statement
     private function executeStatement(mysqli_stmt $stmt){
         if ($stmt->execute()) {
             return true;
@@ -180,6 +183,7 @@ class ProductListings {
         }
     }
 
+    // retrieve id of currently logged in user
     public function getUserId(){
         if (!isset($_SESSION['logged_in'])) {
             $this->statuscode = 401;
@@ -193,8 +197,7 @@ class ProductListings {
 $api = new ProductListings();
 $api->handle_request($_SERVER['REQUEST_METHOD']);
 /* TODO: 
- * Add error handling to database conn and queries
- * FIX ADDING LISTINGS */
+ * Add error handling to database conn and queries */
 ?>
 
 
