@@ -54,26 +54,32 @@
 
       <!-- Listings Page-->
       <div id="listings_screen">
-        <p>Your Listings</p>
         <div id="user_listings_container"></div>
-        <form id="add_listing_form">
-          <label for="listing_name">Name</label>
-          <input type="text" name="name" id="listing_name" placeholder="Item Name..." required />
-      
-          <label for="listing_description">Description</label>
-          <input type="text" name="description" id="listing_description" placeholder="Item Description..." required />
-      
-          <label for="listing_category">Category</label>
-          <input type="text" name="category" id="listing_category" placeholder="Category..." required />
-      
-          <label for="listing_price">Price (£)</label>
-          <input type="number" name="price" id="listing_price" placeholder="Price..." step="0.01" min="0" required />
-      
-          <label for="listing_image">Image URL</label>
-          <input type="text" name="image" id="listing_image" placeholder="Image URL..." required />
-      
-          <button type="submit" id="submit_listing_button">Add Listing</button>
-      </form>
+
+        <div id="listing_modal" class="modal">
+          <button id="close_listing_modal">&times;</button>
+
+          <h2>Add Listing</h2>
+
+          <form id="add_listing_form">
+            <label for="listing_name">Name</label>
+            <input type="text" name="name" id="listing_name" placeholder="Item Name..." required />
+        
+            <label for="listing_description">Description</label>
+            <input type="text" name="description" id="listing_description" placeholder="Item Description..." required />
+        
+            <label for="listing_category">Category</label>
+            <input type="text" name="category" id="listing_category" placeholder="Category..." required />
+        
+            <label for="listing_price">Price (£)</label>
+            <input type="number" name="price" id="listing_price" placeholder="Price..." step="0.01" min="0" required />
+        
+            <label for="listing_image">Image URL</label>
+            <input type="text" name="image" id="listing_image" placeholder="Image URL..." required />
+        
+            <button type="submit" id="submit_listing_button">Add Listing</button>
+        </form>
+      </div>
     </div>
 
     <!-- About Page -->

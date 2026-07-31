@@ -10,6 +10,34 @@ html, body{
   min-height: 100vh;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+}
+
+.modal_content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 90%;
+  position: relative;
+}
+
+#close_listing_modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
 /* login/signup screen styling */
 .screen {
   position: fixed;
@@ -233,10 +261,6 @@ html, body{
   align-items: center;
   gap: 20px;
   box-sizing: border-box;
-}
-
-#add_listing_form{
-  display: none;
 }
 
 #create_listing_button{

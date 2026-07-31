@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // listing page elements
     const listingsPage = document.getElementById("listings_screen");
     const listingsPageBtn = document.getElementById("listings_screen_button");
+    const listingModal = document.getElementById("listing_modal");
+    const closeListingModal = document.getElementById("close_listing_modal");
 
     // about page elements
     const aboutPage = document.getElementById("about_screen");
@@ -186,8 +188,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     // open add listing form
     createListingBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        addListingForm.style.display = 'block';
-    })
+        listingModal.style.display = "flex";
+    });
+
+    // close listing modal if clicked outside of or close button clicked
+    listingModal.addEventListener("click", (e) => {
+        if (e.target === listingModal) {
+            listingModal.style.display = "none";
+        }
+    });
+
+    closeListingModal.addEventListener("click", () => {
+        listingModal.style.display = "none";
+    });
 
     // create listing upon form submission
     addListingForm.addEventListener("submit", (e) => {
@@ -330,6 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.status === 201) {
                 alert("Listing successfully created!");
                 addListingForm.reset();
+                listingModal.style.display = "none";
                 await fetchUserListings();
             } else {
                 alert("Listing creation failed.");
@@ -448,6 +462,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         signupScreen.style.display = "none";
     }
 
+    // update banner appearance based on current page
     function updateBanner(title, showSearch = false, showLogin = false, showCart = false, showCreateListing = false) {
         bannerText.innerHTML = "";
         bannerText.innerHTML = title;
