@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
         } catch (error) {
-            console.error(error);
             alert("Something went wrong.");
         }
     });
@@ -146,7 +145,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // open user's listings page
     listingsPageBtn.addEventListener("click", async (e) => {
-        console.log("clicked");
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
@@ -222,7 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Account creation failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Account creation failed.");
         }
     });
 
@@ -245,7 +243,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Invalid Username or Password");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Login Error");
         }
 
     });
@@ -260,7 +259,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             listingsArray = data.results;
             loadListings(listingsArray, listingContainer);
         } catch (error) {
-            console.error("Fetching listings failed:", error);
+            alert("Something Went Wrong. Please Reload Page");
+            console.error("Listings Display Error");
         }
     }
 
@@ -317,7 +317,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Listing creation failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Add Listing Error")
         }
     }
 
@@ -340,7 +341,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Listing deletion failed.");
             }
         } catch (error) {
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Listing Deletion Error");
         }
     }
 
@@ -371,7 +373,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             document.getElementById("cart_total").textContent =`Total: £${totalPrice.toFixed(2)}`;
         } catch (error) {
-            console.error("Cart error:", error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Loading Cart Error");
         }
 
     }
@@ -405,10 +408,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             if(response.ok){
                 alert("Account Deleted Successfully!");
                 window.location.reload();
+            } else{
+                alert("Account Deletion Failed");
             }
     
         } catch(error){
-            console.error(error);
+            alert("Something Went Wrong. Please Try Again");
+            console.error("User Deletion Error");
         }
     }
 
