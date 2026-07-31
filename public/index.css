@@ -4,10 +4,8 @@ html, body{
   font-family: Arial, sans-serif;
 }
 
-.main_page {
-  display: none;
-  flex-direction: column;
-  min-height: 100vh;
+#main_page {
+  padding-top: 100px;
 }
 
 .modal {
@@ -256,6 +254,7 @@ html, body{
   display: none;
   min-height: 100vh;
   margin-left: 200px;
+  padding-top: 120px;
   padding: 20px;
   flex-direction: column;
   align-items: center;
@@ -265,6 +264,29 @@ html, body{
 
 #create_listing_button{
   display: none;
+}
+
+.listing_modal_card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+#add_listing_form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#add_listing_form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 /* Account Page Styling */
@@ -282,12 +304,5 @@ html, body{
   border-radius: 5px;
   padding: 10px;
   height: 50%;
-  align-items: center;
-}
-
-#listings_screen {
-  display: none;
-  height: 100vh;
-  justify-content: center;
   align-items: center;
 }
