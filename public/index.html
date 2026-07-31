@@ -42,15 +42,26 @@
     </div>
 
     <!-- Account Page-->
-     <div id="account_screen">
-      <p>ACCOUNT!!</p>
+    <div id="account_screen">
+
       <div id="account_card">
-        <button class="button" id="change_email_button">Change Email</button>
-        <button class="button" id="change_username_button">Change Username</button>
-        <button class="button" id="change_password_button">Change Password</button>
-        <button class="button" id="delete_account_button">Delete Account</button>
+  
+          <h2>Your Account</h2>
+  
+          <p id="account_username">
+              Username:
+          </p>
+  
+          <p id="account_email">
+              Email:
+          </p>
+  
+          <button class="button" id="change_email_button">Change Email</button>
+          <button class="button" id="change_username_button">Change Username</button>
+          <button class="button" id="change_password_button">Change Password</button>
+          <button class="button" id="delete_account_button">Delete Account</button>
       </div>
-     </div>
+  </div>
 
       <!-- Listings Page-->
       <div id="listings_screen">
@@ -62,7 +73,7 @@
       
               <h2>Add Listing</h2>
       
-              <form id="add_listing_form">
+              <form id="add_listing_form" enctype="multipart/form-data">
                   <label for="listing_name">Name</label>
                   <input type="text" name="name" id="listing_name" placeholder="Item Name..." required />
       
@@ -74,9 +85,11 @@
       
                   <label for="listing_price">Price (£)</label>
                   <input type="number" name="price" id="listing_price" step="0.01" min="0" required />
-      
-                  <label for="listing_image">Image URL</label>
-                  <input type="text" name="image" id="listing_image" placeholder="Image URL..." required />
+
+                  <label for="listing_image">Image</label>
+                  <input type="file" name="image" id="listing_image" accept="image/*" required />
+                  
+                  <img id="image_preview" style="display:none; width:150px; margin-top:10px;">
       
                   <button type="submit">Add Listing</button>
               </form>

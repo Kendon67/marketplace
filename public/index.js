@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const listingContainer = document.getElementById("listing_container");
+    const listingImage = document.getElementById("listing_image");
+    const imagePreview = document.getElementById("image_preview");
 
     // login elements
     const loginBtn = document.getElementById("login_button");
@@ -79,6 +81,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (error) {
             alert("Something went wrong.");
+        }
+    });
+
+    // give user image preview before submission
+    listingImage.addEventListener("change", () => {
+        const file = listingImage.files[0];
+    
+        if (file) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = "block";
         }
     });
 
@@ -296,10 +308,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function loadListings(listings, container, isUserListings = false) {
         console.log("isUserListings:", isUserListings);
         container.innerHTML = "";
+        
+        if(!listings.length > 0){
+
+            container.innerHTML = `
+                <div class="empty_message">
+                    <h2>No listings found</h2>
+                    <p>Listings Will Load Here.</p>
+                </div>
+            `;
+    
+            return;
+        }
+
         listings.forEach(listing => {
             const card = document.createElement("div");
             card.className = "listing_card";
-
+            
             card.innerHTML = `
             <img src="${listing.image}" alt="${listing.name}">
             <h2>${listing.name}</h2>
