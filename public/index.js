@@ -17,7 +17,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const homeBtns = document.querySelectorAll("#login_home_button, #signup_home_button");
     const navButtons = document.querySelectorAll(".nav_button");
     const homeNavBtn = document.getElementById("home_screen_button");
+
+    // search bar elements
+    const searchBar = document.getElementById("search_bar");
     const searchInput = document.getElementById("search_input");
+    const bannerText = document.getElementById("banner_title");
 
     // account page elements
     const accountPage = document.getElementById("account_screen");
@@ -37,6 +41,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // about page elements
     const aboutPage = document.getElementById("about_screen");
     const aboutPageBtn = document.getElementById("about_screen_button");
+
+    // banner elements
 
     // cart elements
     const cartBtn = document.getElementById("cart_button");
@@ -146,6 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         mainPage.style.display = 'block';
+        updateBanner("MARKET", true, true);
     });
 
     // open user's listings page
@@ -153,6 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         hideAllPages();
         listingsPage.style.display = 'flex';
+        updateBanner("Your Listings")
 
         await fetchUserListings();
     });
@@ -161,7 +169,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     accountPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
         hideAllPages();
+
         accountPage.style.display = 'flex';
+        updateBanner("Your Account");
     });
 
     // delete current logged in account
@@ -436,6 +446,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = "none";
         loginScreen.style.display = "none";
         signupScreen.style.display = "none";
+    }
+
+    function updateBanner(title, showSearch = false, showLogin = false) {
+        bannerText.innerHTML = "";
+        bannerText.innerHTML = title;
+    
+        searchBar.style.display = showSearch ? "flex" : "none";
+        loginBtn.style.display = showLogin ? "flex" : "none";
     }
     
 });
