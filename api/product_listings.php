@@ -100,7 +100,7 @@ class ProductListings {
         $userId = $this->getUserId();
 
         if (!isset($_POST['name']) || !isset($_POST['description']) || !isset($_POST['price']) 
-        || !isset($_POST['category']) || !isset($_POST['image'])) {
+        || !isset($_POST['category']) || !isset($_FILES['image'])) {
     
             $this->statuscode = 400;
             return;
@@ -110,7 +110,12 @@ class ProductListings {
         $description = htmlspecialchars(strip_tags(trim($_POST['description'])));
         $price = (float)$_POST['price'];
         $category = htmlspecialchars(strip_tags(trim($_POST['category'])));
-        $image = htmlspecialchars(strip_tags(trim($_POST['image'])));
+        $image = $this->handleImageUpload();
+
+        if (!$image) {
+            $this->statuscode = 400;
+            return;
+        }
     
         $sql = "INSERT INTO `product_listings` 
                 (userId, name, description, price, category, image) 
@@ -131,12 +136,7 @@ class ProductListings {
     
     // delete a listing from the database
     public function deleteListing() {
-        if (!isset($_SESSION['logged_in'])) {
-            $this->statuscode = 401;
-            return;
-        }
-    
-        $userId = $_SESSION['logged_in']['id'];
+        $userId = $this->getUserId();
         $data = json_decode(file_get_contents("php://input"), true);
     
         if (!isset($data['listing_id'])) {
@@ -184,13 +184,40 @@ class ProductListings {
     }
 
     // retrieve id of currently logged in user
-    public function getUserId(){
+    private function getUserId(){
         if (!isset($_SESSION['logged_in'])) {
             $this->statuscode = 401;
             return;
         }
     
         return $_SESSION['logged_in']['id'];
+    }
+
+    private function handleImageUpload() {
+        if (!isset($_FILES['image'])) {
+            return false;
+        }
+    
+        $image = $_FILES['image'];
+        if ($image['error'] !== UPLOAD_ERR_OK) {
+            return false;
+        }
+    
+        $allowedTypes = ["image/jpeg", "image/png","image/webp"];
+    
+        if (!in_array($image['type'], $allowedTypes)) {
+            return false;
+        }
+
+        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+        $filename = uniqid("img_", true) . "." . $extension;
+        $uploadPath = "../images/" . $filename;
+    
+        if (move_uploaded_file($image['tmp_name'], $uploadPath)) {
+            return "/images/" . $filename;
+        }
+    
+        return false;
     }
 }
 
