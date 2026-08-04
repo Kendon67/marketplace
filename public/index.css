@@ -358,3 +358,11 @@ html, body{
   background-color: #ff000d;
   color: white;
 }
+
+/* About Page Styling*/ 
+#about_screen {
+  display: none;
+  margin-left: 200px;
+  margin-top: 120px;
+  padding: 20px;
+}

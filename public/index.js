@@ -188,6 +188,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateBanner("Your Account");
     });
 
+    aboutPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideAllPages();
+    
+        aboutPage.style.display = "flex";
+        updateBanner("About");
+    });
+
     // delete current logged in account
     deleteAccountBtn.addEventListener("click", async (e) => {
         e.preventDefault();
