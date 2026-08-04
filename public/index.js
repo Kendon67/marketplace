@@ -188,6 +188,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateBanner("Your Account");
     });
 
+    changeEmailBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changeEmail();
+    });
+
+    changeUsernameBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changeUsername();
+    });
+
+    changePasswordBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changePassword();
+    });
+
     // delete current logged in account
     deleteAccountBtn.addEventListener("click", async (e) => {
         e.preventDefault();

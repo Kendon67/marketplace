@@ -221,8 +221,6 @@ class users{
             }
         }
     }
-
-    
     
     // prepare statement for execution
     private function prepareStmt(string $sql): mysqli_stmt|false{
