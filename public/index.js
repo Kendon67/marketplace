@@ -201,6 +201,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     changePasswordBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         await changePassword();
+    });
+    
     aboutPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
         hideAllPages();
