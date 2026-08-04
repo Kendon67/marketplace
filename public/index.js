@@ -493,6 +493,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = "none";
         loginScreen.style.display = "none";
         signupScreen.style.display = "none";
+        aboutPage.style.display = "none";
     }
 
     // update banner appearance based on current page
