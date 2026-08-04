@@ -474,6 +474,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function changeEmail() {
+        try {
+            const newEmail = prompt("Enter your new email:");
+    
+            if (newEmail) {
+                const emailData = new FormData();
+                emailData.append("email", newEmail);
+    
+                const response = await fetch("/api/users.php?action=changeEmail", {
+                    method: "POST",
+                    body: emailData
+                });
+    
+                if (response.ok) {
+                    alert("Email Updated Successfully!");
+                } else {
+                    alert("Email Update Failed");
+                }
+            }
+    
+        } catch(error) {
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Email Update Error");
+        }
     }
 
     async function changeUsername() {

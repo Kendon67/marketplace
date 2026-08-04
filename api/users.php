@@ -182,7 +182,7 @@ class users{
         }
 
         $userId = $this->getUserId();
-        $email= htmlspecialchars(strip_tags(trim($_POST['email']), FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL));
+        $email= htmlspecialchars(strip_tags(trim($_POST['email'])), FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);
 
         $sql = "UPDATE `users` SET email = ? WHERE userId = ?";
         $stmt = $this->prepareStmt($sql);
