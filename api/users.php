@@ -63,9 +63,17 @@ class users{
             return;
         }
 
+
+
         $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
         $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = $_POST['password'];
+
+        if (!$this->validatePassword($password)) {
+            return;
+        }
+    
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO `users` (username, email, password) VALUES (?, ?, ?);";
         $stmt = $this->prepareStmt($sql);
@@ -73,7 +81,7 @@ class users{
             return;
         }
 
-        $stmt->bind_param("sss", $username, $email, $password);
+        $stmt->bind_param("sss", $username, $email, $hashedPassword);
         if ($this->executeStmt($stmt)) {
             $this->statuscode = 201;
             
@@ -208,7 +216,13 @@ class users{
         }
 
         $userId = $this->getUserId();
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = $_POST['password'];
+        
+        if (!$this->validatePassword($password)) {
+            return; 
+        }
+
+        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
         $sql = "UPDATE `users` SET password = ? WHERE userId = ?";
         $stmt = $this->prepareStmt($sql);
@@ -217,14 +231,21 @@ class users{
             return;
         }
 
-        $stmt->bind_param("si", $password, $userId);
+        $stmt->bind_param("si", $hashedPassword, $userId);
         if ($this->executeStmt($stmt)) {
-            if ($stmt->affected_rows > 0) {
-                $this->statuscode = 200;
-            } else {
-                $this->statuscode = 404;
-            }
+            $this->statuscode = 200;
+        } else {
+            $this->statuscode = 404;
         }
+    }
+
+    // validate password input
+    private function validatePassword(string $password){
+        if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            $this->statuscode = 400;
+            return false;
+        }
+        return true;
     }
     
     // prepare statement for execution
