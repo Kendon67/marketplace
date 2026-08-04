@@ -127,22 +127,31 @@ class users{
             return false;
         }
         $stmt->bind_param("i", $userId);
-    
-        if (!$stmt->execute()) {
-            $this->statuscode = 500;
-            return false;
-        }
-    
-        if ($stmt->affected_rows > 0) {
-            session_unset();
-            session_destroy();
-    
+
+        if ($this->executeStmt($stmt)) {
             $this->statuscode = 200;
-            return true;
-        }
+            if ($stmt->affected_rows > 0) {
+                session_unset();
+                session_destroy();
     
-        $this->statuscode = 404;
-        return false;
+                $this->statuscode = 200;
+            }
+        } else {
+            $this->statuscode = 404;
+        }
+    }
+
+    public function changeUsername(){
+        $userId = $this->getUserId();
+        $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
+
+        $sql = "UPDATE `users` SET username = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+
+        $stmt->bind_param("si", $username, $userId);
+        if ($this->executeStmt($stmt)) {
+            $this->statuscode = 200;
+        }
     }
     
     // prepare statement for execution
