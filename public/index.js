@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 body: listingData
             });
     
-            if (response.status === 201) {
+            if (response.status.ok) {
                 alert("Listing successfully created!");
                 addListingForm.reset();
                 listingModal.style.display = "none";

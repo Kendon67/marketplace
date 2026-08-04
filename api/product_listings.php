@@ -136,12 +136,7 @@ class ProductListings {
     
     // delete a listing from the database
     public function deleteListing() {
-        if (!isset($_SESSION['logged_in'])) {
-            $this->statuscode = 401;
-            return;
-        }
-    
-        $userId = $_SESSION['logged_in']['id'];
+        $userId = $this->getUserId();
         $data = json_decode(file_get_contents("php://input"), true);
     
         if (!isset($data['listing_id'])) {
@@ -208,11 +203,7 @@ class ProductListings {
             return false;
         }
     
-        $allowedTypes = [
-            "image/jpeg",
-            "image/png",
-            "image/webp"
-        ];
+        $allowedTypes = ["image/jpeg", "image/png","image/webp"];
     
         if (!in_array($image['type'], $allowedTypes)) {
             return false;

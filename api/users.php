@@ -70,6 +70,7 @@ class users{
         $stmt->bind_param("sss", $username, $email, $password);
         if ($this->executeStmt($stmt)) {
             $this->statuscode = 201;
+            
         }
     }
 
