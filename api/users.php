@@ -70,7 +70,7 @@ class users{
         if (!$this->validatePassword($password)) {
             return;
         }
-    §
+    
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO `users` (username, email, password) VALUES (?, ?, ?);";
