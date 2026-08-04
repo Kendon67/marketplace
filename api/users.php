@@ -63,8 +63,6 @@ class users{
             return;
         }
 
-
-
         $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
         $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
         $password = $_POST['password'];
@@ -72,7 +70,7 @@ class users{
         if (!$this->validatePassword($password)) {
             return;
         }
-    
+    §
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO `users` (username, email, password) VALUES (?, ?, ?);";
