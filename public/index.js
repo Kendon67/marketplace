@@ -473,6 +473,37 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    async function changeEmail() {
+    }
+
+    async function changeUsername() {
+        try{
+            const newUsername = prompt("Enter your new username:");
+
+            if(newUsername){
+                const usernameData = new FormData();
+                usernameData.append("username", newUsername);
+
+                const response = await fetch("/api/users.php?action=changeUsername", {
+                    method: "POST",
+                    body: usernameData
+                });
+
+                if(response.ok){
+                    alert("Username Updated Successfully!");
+                } else{
+                    alert("Username Update Failed");
+                }
+            }
+        }
+        catch(error){
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Username Update Error");
+        }
+    }
+
+    async function changePassword() {}
+
     // delete user from database
     async function deleteUser(){
         try {
