@@ -186,7 +186,6 @@ class users{
 
         $sql = "UPDATE `users` SET email = ? WHERE userId = ?";
         $stmt = $this->prepareStmt($sql);
-
         if (!$stmt) {
             return;
         }

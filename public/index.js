@@ -473,7 +473,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function changeEmail() {
+    // change users email
+    async function changeEmail(){
         try {
             const newEmail = prompt("Enter your new email:");
     
@@ -499,7 +500,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function changeUsername() {
+    // change users username
+    async function changeUsername(){
         try{
             const newUsername = prompt("Enter your new username:");
 
@@ -525,7 +527,32 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function changePassword() {}
+    // change users password
+    async function changePassword(){
+        try{
+            const newPassword = prompt("Enter your new password:");
+
+            if(newPassword){
+                const passwordData = new FormData();
+                passwordData.append("password", newPassword);
+
+                const response = await fetch("/api/users.php?action=changePassword", {
+                    method: "POST",
+                    body: passwordData
+                });
+
+                if(response.ok){
+                    alert("Password Updated Successfully!");
+                } else{
+                    alert("Password Update Failed");
+                }
+            }
+        }
+        catch(error){
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Password Update Error");
+        }
+    }
 
     // delete user from database
     async function deleteUser(){
