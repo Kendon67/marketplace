@@ -201,6 +201,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     changePasswordBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         await changePassword();
+    aboutPageBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideAllPages();
+    
+        aboutPage.style.display = "flex";
+        updateBanner("About");
     });
 
     // delete current logged in account
@@ -581,6 +587,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         accountPage.style.display = "none";
         loginScreen.style.display = "none";
         signupScreen.style.display = "none";
+        aboutPage.style.display = "none";
     }
 
     // update banner appearance based on current page
