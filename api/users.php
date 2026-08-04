@@ -30,8 +30,14 @@ class users{
                     $this->addUser();
                 } elseif($_GET['action'] === 'checkUser') {
                     $this->checkUser();
-                } elseif($_GET['action'] === 'logout'){
+                } elseif($_GET['action'] === 'logout') {
                     $this->logout();
+                }elseif($_GET['action'] === 'changeUsername') {
+                    $this->changeUsername();
+                }elseif($_GET['action'] === 'changeEmail') {
+                    $this->changeEmail();
+                }elseif($_GET['action'] === 'changePassword') {
+                    $this->changePassword();
                 }
                 else {
                     $this->statuscode = 400;
