@@ -141,18 +141,88 @@ class users{
         }
     }
 
+    // change users username
     public function changeUsername(){
+        if (!isset($_POST['username'])){
+            $this->statuscode = 400;
+            return;
+        }
+
         $userId = $this->getUserId();
         $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
 
         $sql = "UPDATE `users` SET username = ? WHERE userId = ?";
         $stmt = $this->prepareStmt($sql);
 
+        if (!$stmt) {
+            return;
+        }
+
         $stmt->bind_param("si", $username, $userId);
         if ($this->executeStmt($stmt)) {
-            $this->statuscode = 200;
+            if ($stmt->affected_rows > 0) {
+                $this->statuscode = 200;
+            } else {
+                $this->statuscode = 404;
+            }
+        }
+    }   
+
+    // change the users email
+    public function changeEmail(){
+        if (!isset($_POST['email'])){
+            $this->statuscode = 400;
+            return;
+        }
+
+        $userId = $this->getUserId();
+        $email= htmlspecialchars(strip_tags(trim($_POST['email']), FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL));
+
+        $sql = "UPDATE `users` SET email = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("si", $email, $userId);
+        if ($this->executeStmt($stmt)) {
+            if ($stmt->affected_rows > 0) {
+                $this->statuscode = 200;
+            } else {
+                $this->statuscode = 404;
+            }
         }
     }
+
+    // change the users password
+    public function changePassword(){
+        if (!isset($_POST['password'])){
+            $this->statuscode = 400;
+            return;
+        }
+
+        $userId = $this->getUserId();
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+        $sql = "UPDATE `users` SET password = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("si", $password, $userId);
+        if ($this->executeStmt($stmt)) {
+            if ($stmt->affected_rows > 0) {
+                $this->statuscode = 200;
+            } else {
+                $this->statuscode = 404;
+            }
+        }
+    }
+
+    
     
     // prepare statement for execution
     private function prepareStmt(string $sql): mysqli_stmt|false{
