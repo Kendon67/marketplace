@@ -30,8 +30,14 @@ class users{
                     $this->addUser();
                 } elseif($_GET['action'] === 'checkUser') {
                     $this->checkUser();
-                } elseif($_GET['action'] === 'logout'){
+                } elseif($_GET['action'] === 'logout') {
                     $this->logout();
+                }elseif($_GET['action'] === 'changeUsername') {
+                    $this->changeUsername();
+                }elseif($_GET['action'] === 'changeEmail') {
+                    $this->changeEmail();
+                }elseif($_GET['action'] === 'changePassword') {
+                    $this->changePassword();
                 }
                 else {
                     $this->statuscode = 400;
@@ -59,7 +65,13 @@ class users{
 
         $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
         $email = htmlspecialchars(strip_tags(trim($_POST['email'])));
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password = $_POST['password'];
+
+        if (!$this->validatePassword($password)) {
+            return;
+        }
+    
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO `users` (username, email, password) VALUES (?, ?, ?);";
         $stmt = $this->prepareStmt($sql);
@@ -67,7 +79,7 @@ class users{
             return;
         }
 
-        $stmt->bind_param("sss", $username, $email, $password);
+        $stmt->bind_param("sss", $username, $email, $hashedPassword);
         if ($this->executeStmt($stmt)) {
             $this->statuscode = 201;
             
@@ -127,22 +139,111 @@ class users{
             return false;
         }
         $stmt->bind_param("i", $userId);
+
+        if ($this->executeStmt($stmt)) {
+            $this->statuscode = 200;
+            if ($stmt->affected_rows > 0) {
+                session_unset();
+                session_destroy();
     
-        if (!$stmt->execute()) {
-            $this->statuscode = 500;
+                $this->statuscode = 200;
+            }
+        } else {
+            $this->statuscode = 404;
+        }
+    }
+
+    // change users username
+    public function changeUsername(){
+        if (!isset($_POST['username'])){
+            $this->statuscode = 400;
+            return;
+        }
+
+        $userId = $this->getUserId();
+        $username = htmlspecialchars(strip_tags(trim($_POST['username'])));
+
+        $sql = "UPDATE `users` SET username = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("si", $username, $userId);
+        if ($this->executeStmt($stmt)) {
+            if ($stmt->affected_rows > 0) {
+                $this->statuscode = 200;
+            } else {
+                $this->statuscode = 404;
+            }
+        }
+    }   
+
+    // change the users email
+    public function changeEmail(){
+        if (!isset($_POST['email'])){
+            $this->statuscode = 400;
+            return;
+        }
+
+        $userId = $this->getUserId();
+        $email= htmlspecialchars(strip_tags(trim($_POST['email'])), FILTER_SANITIZE_EMAIL, FILTER_VALIDATE_EMAIL);
+
+        $sql = "UPDATE `users` SET email = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("si", $email, $userId);
+        if ($this->executeStmt($stmt)) {
+            if ($stmt->affected_rows > 0) {
+                $this->statuscode = 200;
+            } else {
+                $this->statuscode = 404;
+            }
+        }
+    }
+
+    // change the users password
+    public function changePassword(){
+        if (!isset($_POST['password'])){
+            $this->statuscode = 400;
+            return;
+        }
+
+        $userId = $this->getUserId();
+        $password = $_POST['password'];
+        
+        if (!$this->validatePassword($password)) {
+            return; 
+        }
+
+        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+        $sql = "UPDATE `users` SET password = ? WHERE userId = ?";
+        $stmt = $this->prepareStmt($sql);
+
+        if (!$stmt) {
+            return;
+        }
+
+        $stmt->bind_param("si", $hashedPassword, $userId);
+        if ($this->executeStmt($stmt)) {
+            $this->statuscode = 200;
+        } else {
+            $this->statuscode = 404;
+        }
+    }
+
+    // validate password input
+    private function validatePassword(string $password){
+        if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+            $this->statuscode = 400;
             return false;
         }
-    
-        if ($stmt->affected_rows > 0) {
-            session_unset();
-            session_destroy();
-    
-            $this->statuscode = 200;
-            return true;
-        }
-    
-        $this->statuscode = 404;
-        return false;
+        return true;
     }
     
     // prepare statement for execution
@@ -182,6 +283,7 @@ class users{
         return $_SESSION['logged_in']['id'];
     }
 
+    // log user out
     public function logout(){
         session_unset();
         session_destroy();

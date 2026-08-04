@@ -188,6 +188,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateBanner("Your Account");
     });
 
+    changeEmailBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changeEmail();
+    });
+
+    changeUsernameBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changeUsername();
+    });
+
+    changePasswordBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await changePassword();
     aboutPageBtn.addEventListener("click", (e) => {
         e.preventDefault();
         hideAllPages();
@@ -463,6 +476,87 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         } catch (error) {
             console.error("Remove cart error");
+        }
+    }
+
+    // change users email
+    async function changeEmail(){
+        try {
+            const newEmail = prompt("Enter your new email:");
+    
+            if (newEmail) {
+                const emailData = new FormData();
+                emailData.append("email", newEmail);
+    
+                const response = await fetch("/api/users.php?action=changeEmail", {
+                    method: "POST",
+                    body: emailData
+                });
+    
+                if (response.ok) {
+                    alert("Email Updated Successfully!");
+                } else {
+                    alert("Email Update Failed");
+                }
+            }
+    
+        } catch(error) {
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Email Update Error");
+        }
+    }
+
+    // change users username
+    async function changeUsername(){
+        try{
+            const newUsername = prompt("Enter your new username:");
+
+            if(newUsername){
+                const usernameData = new FormData();
+                usernameData.append("username", newUsername);
+
+                const response = await fetch("/api/users.php?action=changeUsername", {
+                    method: "POST",
+                    body: usernameData
+                });
+
+                if(response.ok){
+                    alert("Username Updated Successfully!");
+                } else{
+                    alert("Username Update Failed");
+                }
+            }
+        }
+        catch(error){
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Username Update Error");
+        }
+    }
+
+    // change users password
+    async function changePassword(){
+        try{
+            const newPassword = prompt("Enter your new password:");
+
+            if(newPassword){
+                const passwordData = new FormData();
+                passwordData.append("password", newPassword);
+
+                const response = await fetch("/api/users.php?action=changePassword", {
+                    method: "POST",
+                    body: passwordData
+                });
+
+                if(response.ok){
+                    alert("Password Updated Successfully!");
+                } else{
+                    alert("Password Update Failed");
+                }
+            }
+        }
+        catch(error){
+            alert("Something Went Wrong. Please Try Again");
+            console.error("Password Update Error");
         }
     }
 

@@ -93,7 +93,6 @@ html, body{
   padding: 20px 40px;
   background: linear-gradient(90deg,#5ab180, #53EDC9);
   color: white;
-
   box-sizing: border-box;
   z-index: 1000;
 }
