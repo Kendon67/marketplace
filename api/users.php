@@ -283,6 +283,7 @@ class users{
         return $_SESSION['logged_in']['id'];
     }
 
+    // log user out
     public function logout(){
         session_unset();
         session_destroy();
